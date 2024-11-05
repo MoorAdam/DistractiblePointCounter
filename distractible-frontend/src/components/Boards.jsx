@@ -54,11 +54,6 @@ function Boards() {
 
     return(
         <div>
-            <dialog open={true} className={"modal glass-background"}>
-                <h1>Warning!</h1>
-                <p1>The constitution of Distractible says that "No point cant be undescribed!"</p1>
-                <button className={"interaction content-inset"}>Ok</button>
-            </dialog>
             <div>
                 <div className={"menu-container glass-background content-inset menu-bar"}>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
