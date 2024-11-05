@@ -1,0 +1,190 @@
+html, body {
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 0;
+  background-image: url("assets/background.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+/*Modal*/
+
+.modal{
+  /*margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 90vh;
+  text-align: center;
+  flex-direction: row;*/
+}
+
+.modal-holder{
+  margin: auto;
+}
+
+
+
+.interaction{
+  background: rgba(0, 0, 0, 0.66);
+  border-radius: inherit;
+  box-shadow: 0 4px 30px rgba(69, 24, 24, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+}
+.menu-bar{
+  height: 10vh;
+}
+
+/* CompetitorHandle Board */
+
+/* Inputs */
+
+.number-input{
+  width: 1%;
+}
+table{
+  width: 100%;
+}
+
+.competitor-data-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.competitor-board-input-bar{
+  display: flex;
+}
+.competitor-board-number-input{
+  flex-shrink: 1;
+}
+.competitor-board-text-input{
+  flex-grow: 2;
+}
+.competitor-board-submit-input{
+  flex-grow: 1;
+}
+
+
+
+
+.points-board{
+  overflow-y: scroll;
+  height: 50vh;
+}
+
+.point-date{
+  flex: 1;
+}
+.point-desc{
+  flex: 4;
+}
+.point-point{
+  flex: 1;
+}
+.point-interactions{
+  flex: 1;
+}
+.competitor-name{
+  text-align: center;
+  flex: 5;
+}
+
+.three-dimensional{
+  box-shadow:
+          rgb(0, 0, 0) 5px 5px 13px,
+          rgba(255, 255, 255, 0.65) -1px -1px 17px,
+          inset rgba(0, 0, 0, 0.8) -1px -1px 2px,
+          inset rgba(255, 255, 255, 0.8) 1px 1px 2px
+;
+  border: 0;
+}
+
+.menu-container{
+  text-align: center;
+  justify-content: space-evenly;
+  display: flex;
+}
+
+.menu-item{
+  flex-grow: 1;
+  text-align: center;
+}
+
+.checkbox-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-label {
+  margin: 0;
+}
+
+
+.competitor-image{
+  width: 30%;
+  flex: 1;
+  border-radius: 10%;
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.8);
+}
+
+.competitor-table{
+  text-align: left;
+}
+
+
+.point{
+  border: 1px solid white;
+}
+
+.content-inset{
+  margin: 15px;
+}
+
+.glass-background {
+  background: rgba(234, 229, 213, 0.39);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.46);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+.points-board-td{
+  text-align: center;
+}
+
+.container{
+  margin: 30px;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 1100px) {
+  html, body {
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 0;
+    background-image: url("assets/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    flex-direction: column;
+  }
+}
+
+.read-the-docs {
+  color: #888;
+}
