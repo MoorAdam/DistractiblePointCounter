@@ -58,6 +58,10 @@ function Boards() {
                 <div className={"menu-container glass-background content-inset menu-bar"}>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={resetPoints} >Reset Scores</button>
+                    <label className={"menu-item checkbox-input-container content-inset interaction  three-dimensional"}>
+                        <span className={""}>Enforce Rules</span>
+                        <input type={"checkbox"}/>
+                    </label>
                 </div>
             </div>
             <div className={"container"}>
