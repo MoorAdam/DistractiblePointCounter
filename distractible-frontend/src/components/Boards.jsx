@@ -23,13 +23,6 @@ function Boards() {
 
     function handleAddPoint(competitorName, point, desc, creationDate){
 
-        /*
-        * this function is given to every pointBoard, to update the relevant competitor
-        * It gets the creationDate, point, and description.
-        *
-        * When a new point comes in, it makes a copy of the previous data, adds the point to the right competitor, and sets the updated data as the state, which will reset the site
-        * */
-
         console.log(competitorName + " " + point +  " " + desc +  " " + creationDate);
         if (desc === ''){
             alert("By the Laws of the Constitution, you have to write a description! (I can see you Wade....)");
@@ -59,26 +52,13 @@ function Boards() {
         return winner;
     }
 
-    /*
-    * This component is the main component. It handles passing down data to the visualization components, and handles adding new ones
-    * When a new one is added (the visual components inherit the right functions) it will reset the page, and distribute all the points to the right visualization components
-    * When the points need to be calculated, a function selects the competitor, with the most point earned, and shows a modal, with the competitor's name
-    *
-    * This component also handles the Council Rules
-    * */
-
-
-
     return(
         <div>
-
-
-                <dialog open={true} className={"modal glass-background"}>
-                    <h1>Warning!</h1>
-                    <p1>The constitution of Distractible says that "No point cant be undescribed!"</p1>
-                    <button className={"interaction content-inset"}>Ok</button>
-                </dialog>
-
+            <dialog open={true} className={"modal glass-background"}>
+                <h1>Warning!</h1>
+                <p1>The constitution of Distractible says that "No point cant be undescribed!"</p1>
+                <button className={"interaction content-inset"}>Ok</button>
+            </dialog>
             <div>
                 <div className={"menu-container glass-background content-inset menu-bar"}>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
