@@ -2,7 +2,7 @@
 
 
 # DistractiblePointCounter
-This is a fanmade site for managing points for podcast Distractible [![Spotify](https://img.shields.io/badge/Spotify-1ED760?logo=spotify&logoColor=white)](https://open.spotify.com/show/2X40qLyoj1wQ2qE5FVpA7x), hosted by 
+This is a fanmade site for managing points for podcast  [Distractible](https://open.spotify.com/show/2X40qLyoj1wQ2qE5FVpA7x), hosted by 
 - Mark Fishbach [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UC7_YxT-KID8kRbqZo7MyscQ)
 - Bob Muyskens [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/@muyskerm)
 - Wade Barnes [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/@LordMinion777)<br>
