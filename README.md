@@ -26,6 +26,7 @@ MoorAdam [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?log
 
 ## Running the frontend application
 This application's front end uses Vite as its main build tool.
+You will need [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](https://nodejs.org/en) to run this app! (You can download it by clicking on the previous label)
 Vite requires external libraries to run, so you need to install those.
 In the terminal, navigate to the project directory. There, navigate into the frontend folder, and type
 ```js
