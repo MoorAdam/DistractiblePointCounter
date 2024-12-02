@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import CompetitorBoard from "./CompetitorBoard.jsx";
 
-import markImage from '../assets/mark.jpg';
-import wadeImage from '../assets/wade.jpg';
-import bobImage from '../assets/bob.jpg';
+const markImage = '/images/mark.jpg';
+const wadeImage = '/images/wade.jpg';
+const bobImage = '/images/bob.jpg';
 
 import CompetitorData from './CompetitorData.js';
 
