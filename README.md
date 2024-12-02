@@ -25,6 +25,10 @@ MoorAdam [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?log
 [![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff)](https://en.wikipedia.org/wiki/CSS)<br>
 
 ## Running the frontend application
+
+There is a dockerized version available on Docker Hub through this link: https://hub.docker.com/r/adammoor/distractible_point_counter<br>
+If you would like to see more about the source code, follow the instructions down below.
+
 This application's front end uses Vite as its main build tool.
 You will need [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](https://nodejs.org/en) to run this app! (You can download it by clicking on the green label)
 Vite requires external libraries to run, so you need to install those.
