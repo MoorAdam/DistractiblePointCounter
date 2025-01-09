@@ -33,6 +33,7 @@ module.exports = {
   getEpisodeByDate,
   addPoint,
   createEpisode,
+  getAllPointsFromEpisode,
 };
 
 const Episode = db.model("Episode", episodeSchema);
@@ -123,6 +124,27 @@ async function createEpisode(date, host, competitors, title = null) {
     } else {
       return { error: "An episode for this date already exists!" };
     }
+  } catch (error) {
+    console.log(error);
+    return {
+      error:
+        "Something went wrong! Please check if request was submitted with the right data, in the right format!",
+    };
+  }
+}
+
+async function getAllPointsFromEpisode(episodeId) {
+  try {
+
+    const episode = await Episode.findById(episodeId);
+
+    if(episode != null){
+        return episode.points;
+    }
+    else{
+        return {error: "Couldn't find episode with rpovided id!"};
+    }
+
   } catch (error) {
     console.log(error);
     return {

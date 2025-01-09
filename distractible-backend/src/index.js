@@ -74,3 +74,15 @@ app.post('/api/add-point-to-episode', async(req, res) => {
       res.send(result.error);
     }
 })
+app.get('/api/get-all-points-from-episode', async(req,res) => {
+  const episodeId = req.body.episodeId;
+  const result = await dataBase.getAllPointsFromEpisode(episodeId);
+  if(!result.error){
+    res.status(200);
+    res.send(result);
+  }
+  else{
+    res.status(404);
+    res.send("Couldn't find episode with provided id!")
+  }
+})
