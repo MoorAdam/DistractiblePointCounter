@@ -13,7 +13,6 @@ function Point(props){
                     <td className={"point-point point"}><p>{props.point}</p></td>
                     <td className={"point-desc point"}><p>{props.desc}</p></td>
                     <td className={"point-date point"}><p>{creationDate}</p></td>
-
                 </tr>
                 </tbody>
             </table>

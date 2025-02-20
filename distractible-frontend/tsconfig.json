@@ -3,7 +3,8 @@
         "jsx" : "react",
         "outDir": "comp",
         "target": "ESNext",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
     },
     "include": ["src/**/*"]
 }

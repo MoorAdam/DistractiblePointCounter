@@ -9,8 +9,8 @@ function CompetitorBoard({addPoint, competitorData}) {
     const imageUrl = competitorData.getCompetitorImage();
     const points = competitorData.getAllPoints();
 
-    const [pointDescription, setPointDescription] = React.useState('');
-    const [pointValue, setPointValue] = React.useState(0);
+    const [pointDescription, setPointDescription] = React.useState<string>("");
+    const [pointValue, setPointValue] = React.useState<number>(0);
 
     useLayoutEffect(() => {
         setCurrentPointSum(competitorData.tabulatePoints());
@@ -19,7 +19,7 @@ function CompetitorBoard({addPoint, competitorData}) {
     const [currentPointSum, setCurrentPointSum] = React.useState(0);
 
     return (
-        <div className={"glass-background content-inset"}>
+        <div className={"glass-background content-inset item"}>
             <div className="content-inset">
                 <div className={"competitor-bar-profile"}>
                     <div className={"competitor-data-container"}>
@@ -30,7 +30,7 @@ function CompetitorBoard({addPoint, competitorData}) {
                 <div className={"competitor-board-input-bar"}>
 
                     <div className={"competitor-board-number-input"}><input type="number"
-                                                                            onChange={(e) => setPointValue(e.target.value)}/>
+                                                                            onChange={(e) => setPointValue(parseInt(e.target.value))}/>
                     </div>
                     <div className={"points-board-td"}><input type="text" onChange={(e) => setPointDescription(e.target.value)}/></div>
                     <div className={"competitor-board-submit-input"}><input type="button" value={"Submit"} onClick={() => addPoint(competitorName, pointValue, pointDescription)}/></div>

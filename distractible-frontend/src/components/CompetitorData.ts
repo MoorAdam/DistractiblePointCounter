@@ -1,9 +1,14 @@
-import point from "./Point";
+
+interface point{
+    point : number,
+    desc : string,
+    creationDate : Date
+}
 
 export default class competitorData {
     _competitorImage;
-    _competitorName;
-    _points;
+    _competitorName : string;
+    _points : point[];
 
     constructor(competitorName, competitorImage){
         this._competitorImage = competitorImage;
@@ -15,7 +20,7 @@ export default class competitorData {
     }
 
     addPoint(point, desc, creationDate){
-        const newPoint = {
+        const newPoint : point = {
             point : parseInt(point),
             desc : desc,
             creationDate : creationDate

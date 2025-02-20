@@ -68,23 +68,17 @@ function Boards() {
             <div className={"container"}>
             <CompetitorBoard
                     competitorData={competitorData.Mark}
-                    className="item"
                     addPoint={handleAddPoint}
                 />
                 <CompetitorBoard
                     competitorData={competitorData.Bob}
-                    className="item"
                     addPoint={handleAddPoint}
                 />
                 <CompetitorBoard
                     competitorData={competitorData.Wade}
-                    className="item"
                     addPoint={handleAddPoint}
                 />
             </div>
-
-
-
         </div>
     );
 
