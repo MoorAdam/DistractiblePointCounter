@@ -24,10 +24,10 @@ app.listen(port, () => {
 
 app.post('/api/create-episode', async (req, res) => {
 
-  const host = req.body.host;
-  const date = req.body.date;
-  const title = req.body.title;
-  const competitors = req.body.competitors;
+  const host : string = req.body.host;
+  const date : string = req.body.date;
+  const title : string = req.body.title;
+  const competitors : string[] = req.body.competitors;
 
   const response = await dataBase.createEpisode(date, host, competitors, title);
 

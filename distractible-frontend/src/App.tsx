@@ -1,5 +1,5 @@
 import './App.css'
-import Boards from "./components/Boards.jsx";
+import Boards from "./components/Boards.js";
 
 
 /*

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import CompetitorBoard from "./CompetitorBoard.jsx";
+import CompetitorBoard from "./CompetitorBoard";
 
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
@@ -8,6 +8,11 @@ const bobImage = '/images/bob.jpg';
 import CompetitorData from './CompetitorData.js';
 
 function Boards() {
+
+    interface winner {
+        name : string,
+        data : string[]
+    }
 
     const initialData = {
         Mark: new CompetitorData("Mark", markImage),
@@ -36,7 +41,7 @@ function Boards() {
     }
 
     function calculateWinner(){
-        let maxPoints = Number.MIN_VALUE
+        let maxPoints : number = Number.MIN_VALUE
         let winner = null;
         for (let competitorName in competitorData) {
             const points = competitorData[competitorName].tabulatePoints();

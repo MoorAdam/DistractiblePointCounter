@@ -95,7 +95,7 @@ async function addPoint(point, episodeId) {
       return { error: "Episode was not found" };
     }
   } catch (err) {
-    console.log(error);
+    console.log(err);
     return {
       error:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",

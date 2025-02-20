@@ -1,5 +1,5 @@
 import React, {useLayoutEffect} from 'react';
-import Point from './Point.jsx';
+import Point from './Point';
 
 
 

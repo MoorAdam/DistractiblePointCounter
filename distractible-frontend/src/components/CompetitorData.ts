@@ -1,4 +1,4 @@
-import point from "./Point.jsx";
+import point from "./Point";
 
 export default class competitorData {
     _competitorImage;
