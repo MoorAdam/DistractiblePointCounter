@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import CompetitorBoard from "./CompetitorBoard";
+import CompetitorBoard from "../components/CompetitorBoard";
 
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
 
-import CompetitorData from './CompetitorData.js';
+import CompetitorData from '../components/CompetitorData.js';
 
 function Boards() {
 
