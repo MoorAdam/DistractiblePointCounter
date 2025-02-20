@@ -18,6 +18,9 @@ const episodeSchema = new db.Schema({
   competitors: { type: Array, required: true },
 });
 
+const Episode = db.model("Episode", episodeSchema);
+const Point = db.model("Point", pointSchema);
+
 async function connectDatabase() {
   try {
     await db.connect(process.env.DB_URL);
@@ -27,17 +30,6 @@ async function connectDatabase() {
     process.exit(1); // Exit process with failure
   }
 }
-
-module.exports = {
-  connectDatabase,
-  getEpisodeByDate,
-  addPoint,
-  createEpisode,
-  getAllPointsFromEpisode,
-};
-
-const Episode = db.model("Episode", episodeSchema);
-const Point = db.model("Point", pointSchema);
 
 async function getEpisodeByDate(date) {
   try {
@@ -153,3 +145,12 @@ async function getAllPointsFromEpisode(episodeId) {
     };
   }
 }
+
+module.exports = {
+  connectDatabase,
+  getEpisodeByDate,
+  addPoint,
+  createEpisode,
+  getAllPointsFromEpisode,
+};
+
