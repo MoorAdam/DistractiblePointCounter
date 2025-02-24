@@ -1,29 +1,47 @@
 const { ListSearchIndexesCursor, ObjectId } = require("mongodb");
-const db = require("mongoose");
-require("dotenv").config();
+import mongoose, { Schema, Document } from "mongoose";
 
-const pointSchema = db.Schema({
-  point: { type: Number, required: true },
-  date: { type: Date, required: true },
-  competitor: { type: String, required: true },
-  description: { type: String, required: true },
+import * as dotenv from "dotenv";
+dotenv.config();
+
+interface IPoint {
+  point: number;
+  date: Date;
+  competitor: string;
+  description: string;
+}
+
+interface IEpisode {
+  date: Date;
+  title: string;
+  host: string;
+  points: IPoint[];
+  winner: string;
+  competitors: string[];
+}
+
+const pointSchema = new mongoose.Schema<IPoint>({
+  point : {type: Number, required: true},
+  date: {type: Date, required: true},
+  competitor: {type: String, required: true},
+  description: {type: String, required: true}
 });
 
-const episodeSchema = new db.Schema({
+const episodeSchema = new mongoose.Schema<IEpisode>({
   date: { type: Date, required: true },
   title: { type: String },
   host: { type: String, required: true },
   points: [pointSchema],
   winner: { type: String },
-  competitors: { type: Array, required: true },
+  competitors: { type: [String], required: true },
 });
 
-const Episode = db.model("Episode", episodeSchema);
-const Point = db.model("Point", pointSchema);
+const Episode = mongoose.model("Episode", episodeSchema);
+const Point = mongoose.model("Point", pointSchema);
 
 async function connectDatabase() {
   try {
-    await db.connect(process.env.DB_URL);
+    await mongoose.connect(process.env.DB_URL);
     console.log("Database connected successfully!");
   } catch (error) {
     console.error("Error connecting to the database:", error);
@@ -31,7 +49,7 @@ async function connectDatabase() {
   }
 }
 
-async function getEpisodeByDate(date) {
+async function getEpisodeByDate(date: string): Promise<any> {
   try {
     console.log("Trying to query episde by date: " + date);
 
@@ -56,7 +74,7 @@ async function getEpisodeByDate(date) {
   }
 }
 
-async function addPoint(point, episodeId) {
+async function addPoint(point: IPoint, episodeId: string): Promise<any> {
   console.log("Trying to new point into episode: " + episodeId);
 
   try {
@@ -95,7 +113,7 @@ async function addPoint(point, episodeId) {
   }
 }
 
-async function createEpisode(date, host, competitors, title = null) {
+async function createEpisode(date: Date, host: string, competitors: string[], title: string | null = null): Promise<any> {
   try {
     console.log("Trying to fetch episode with date: " + date);
 
@@ -125,7 +143,7 @@ async function createEpisode(date, host, competitors, title = null) {
   }
 }
 
-async function getAllPointsFromEpisode(episodeId) {
+async function getAllPointsFromEpisode(episodeId: string): Promise<any> {
   try {
 
     const episode = await Episode.findById(episodeId);
