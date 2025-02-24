@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@types/node": "^22.13.4",
     "@types/react": "^19.0.10",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -15,5 +14,9 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^22.13.4"
+  }
 }
