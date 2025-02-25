@@ -109,7 +109,7 @@ async function addPoint(point: IPoint, episodeId: string): Promise<IDBResponse> 
   }
 }
 
-async function createEpisode(episode : IEpisode): Promise<ObjectId | IError> {
+async function createEpisode(episode : IEpisode): Promise<IDBResponse> {
   try {
     console.log("Trying to fetch episode with date: " + episode.date);
 
@@ -126,16 +126,18 @@ async function createEpisode(episode : IEpisode): Promise<ObjectId | IError> {
       });
       await newEpisode.save();
       console.log("New episode have been created! id: " + newEpisode._id);
-      return (await Episode.findOne({ date: episode.date }))._id;
+      return { success: true };
     } else {
-      return { errorMessage: "Episode with this date already exists!" } as IError;
+      return { success: false, errorCode : 400, errorMessage: "Episode with this date already exists!" };
     }
   } catch (error) {
     console.log(error);
     return {
+      success: false,
+      errorCode : 400,
       errorMessage:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",
-    } as IError;
+    };
   }
 }
 
