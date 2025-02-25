@@ -33,26 +33,28 @@ async function connectDatabase() {
   }
 }
 
-async function getEpisodeByDate(date: string): Promise<any> {
+async function getEpisodeByDate(date: string): Promise<IEpisode | IError> {
   try {
     console.log("Trying to query episde by date: " + date);
 
-    const result = await await Episode.find().where({ date: new Date(date) });
+    const result : IEpisode = await Episode.findOne().where({ date: new Date(date) });
 
     console.log("Search result: " + result);
 
     if (result != null) {
-      return result;
+      return result as IEpisode;
     } else {
       return {
-        error:
+        errorCode : 404,
+        errorMessage:
           "Can't find episode with the provided date! Check if the format or the date is right!",
       };
     }
   } catch (error) {
     console.log(error);
     return {
-      error:
+      errorCode : 400,
+      errorMessage:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",
     };
   }
