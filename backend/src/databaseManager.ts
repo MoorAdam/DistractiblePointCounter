@@ -42,7 +42,7 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
     console.log("Search result: " + result);
 
     if (result != null) {
-      return {success: true};
+      return {success: true, data: result};
     } else {
       return {
         success: false,
@@ -141,22 +141,24 @@ async function createEpisode(episode : IEpisode): Promise<IDBResponse> {
   }
 }
 
-async function getAllPointsFromEpisode(episodeId: string): Promise<any> {
+async function getAllPointsFromEpisode(episodeDate: string): Promise<IDBResponse> {
   try {
 
-    const episode = await Episode.findById(episodeId);
+    const episode = await Episode.findOne().where({date : episodeDate});
 
     if(episode != null){
-        return episode.points;
+        return {success : true, data : episode.points};
     }
     else{
-        return {error: "Couldn't find episode with rpovided id!"};
+        return {success : false, errorCode: 400, errorMessage: "Couldn't find episode with provided date!"};
     }
 
   } catch (error) {
     console.log(error);
     return {
-      error:
+    success: false,
+    errorCode : 400,
+    errorMessage:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",
     };
   }
