@@ -3,8 +3,8 @@
     "@types/react": "^19.0.10",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "mongodb": "^6.12.0",
-    "mongoose": "^8.9.3"
+    "mongodb": "^6.13.1",
+    "mongoose": "^8.10.1"
   },
   "name": "distractible-backend",
   "version": "1.0.0",
@@ -17,6 +17,7 @@
   "description": "",
   "devDependencies": {
     "@types/mongoose": "^5.11.96",
-    "@types/node": "^22.13.4"
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.3"
   }
 }
