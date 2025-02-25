@@ -1,24 +1,8 @@
-const { ListSearchIndexesCursor, ObjectId } = require("mongodb");
 import mongoose, { Schema, Document } from "mongoose";
+import {IEpisode, IPoint, IError} from "./types";
 
 import * as dotenv from "dotenv";
 dotenv.config();
-
-interface IPoint {
-  point: number;
-  date: Date;
-  competitor: string;
-  description: string;
-}
-
-interface IEpisode {
-  date: Date;
-  title: string;
-  host: string;
-  points: IPoint[];
-  winner: string;
-  competitors: string[];
-}
 
 const pointSchema = new mongoose.Schema<IPoint>({
   point : {type: Number, required: true},
@@ -113,33 +97,33 @@ async function addPoint(point: IPoint, episodeId: string): Promise<any> {
   }
 }
 
-async function createEpisode(date: Date, host: string, competitors: string[], title: string | null = null): Promise<any> {
+async function createEpisode(episode : IEpisode): Promise<IEpisode | IError> {
   try {
-    console.log("Trying to fetch episode with date: " + date);
+    console.log("Trying to fetch episode with date: " + episode.date);
 
-    const searchResult = await Episode.find().where({ date: date });
+    const searchResult = await Episode.find().where({ date: episode.date });
 
     if (searchResult.length < 1) {
       console.log("Episode not have been found! Trying to create new episode!");
 
       const newEpisode = new Episode({
-        date: date,
-        host: host,
-        competitors: competitors,
-        title: title,
+        date: episode.date,
+        host: episode.host,
+        competitors: episode.competitors,
+        title: episode.title,
       });
-      newEpisode.save();
+      await newEpisode.save();
       console.log("New episode have been created! id: " + newEpisode._id);
-      return await Episode.findOne({ date: date });
+      return await Episode.findOne({ date: episode.date });
     } else {
-      return { error: "An episode for this date already exists!" };
+      return { errorMessage: "Episode with this date already exists!" } as IError;
     }
   } catch (error) {
     console.log(error);
     return {
-      error:
+      errorMessage:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",
-    };
+    } as IError;
   }
 }
 

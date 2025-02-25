@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
+import { IPoint, IEpisode, IError } from "./types";
+import { isError } from "./utils";
 
 (async () => {
   try {
@@ -14,7 +16,7 @@ const dataBase = require("./databaseManager");
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
+app.get('/', (res) => {
   res.send('Yes, im working!')
 })
 
@@ -24,20 +26,21 @@ app.listen(port, () => {
 
 app.post('/api/create-episode', async (req, res) => {
 
-  const host : string = req.body.host;
-  const date : string = req.body.date;
-  const title : string = req.body.title;
-  const competitors : string[] = req.body.competitors;
+  console.log(req.body);
 
-  const response = await dataBase.createEpisode(date, host, competitors, title);
+  const newEpisode : IEpisode = req.body;
 
-  if(!response.error){
+  const response : IEpisode | IError = await dataBase.createEpisode(newEpisode);
+
+  console.log(response);
+
+  if(!isError(response)){
     res.status(201);
     res.send(response);
   }
   else{
     res.status(409);
-    res.send(response.error);
+    res.send(response.errorMessage);
   }
 })
 
