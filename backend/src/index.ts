@@ -2,8 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
-import { IPoint, IEpisode, IError } from "./types";
-import { isError } from "./utils";
+import { IPoint, IEpisode, IDBResponse } from "./types";
 
 (async () => {
   try {
@@ -30,11 +29,11 @@ app.post('/api/create-episode', async (req, res) => {
 
   const newEpisode : IEpisode = req.body;
 
-  const response : IEpisode | IError = await dataBase.createEpisode(newEpisode);
+  const response : IDBResponse= await dataBase.createEpisode(newEpisode);
 
   console.log(response);
 
-  if(!isError(response)){
+  if(response.success){
     res.status(201);
     res.send(response);
   }
@@ -51,41 +50,41 @@ app.get('/api/get-episode-by-date', async (req, res) => {
   const date = req.body.date;
   const result = await dataBase.getEpisodeByDate(date);
 
-  if(!result.error){
+  if(result.success){
     res.status(200);
-    res.send(result);
+    res.send(result.data);
   }
   else{
-    res.status(404);
-    res.send(result.error);
+    res.status(result.errorCode);
+    res.send(result.errorMessage);
   }
 })
 
 app.post('/api/add-point-to-episode', async(req, res) => {
 
-    const point = req.body.point
-    const episodeId = req.body.episodeId;
+    const point : IPoint = req.body.point
+    const episodeDate = req.body.episodeDate;
 
-    const result = await dataBase.addPoint(point, episodeId);
+    const result = await dataBase.addPoint(point, episodeDate);
 
-    if(result.error){
-      res.status(406);
-      res.send(result.error);
+    if(result.success){
+      res.status(result.errorCode);
+      res.send(result.errorMessage);
     }
     else{
       res.status(200);
-      res.send(result.error);
+      res.send(result.errorMessage);
     }
 })
 app.get('/api/get-all-points-from-episode', async(req,res) => {
-  const episodeId = req.body.episodeId;
-  const result = await dataBase.getAllPointsFromEpisode(episodeId);
-  if(!result.error){
+  const date = req.body.date;
+  const result = await dataBase.getAllPointsFromEpisode(date);
+  if(result.success){
     res.status(200);
-    res.send(result);
+    res.send(result.data);
   }
   else{
-    res.status(404);
-    res.send("Couldn't find episode with provided id!")
+    res.status(result.errorCode);
+    res.send(result.errorMessage)
   }
 })

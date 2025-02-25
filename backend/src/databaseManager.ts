@@ -62,8 +62,8 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
   }
 }
 
-async function addPoint(point: IPoint, episodeId: string): Promise<IDBResponse> {
-  console.log("Trying to new point into episode: " + episodeId);
+async function addPoint(point: IPoint, episodeDate: string): Promise<IDBResponse> {
+  console.log("Trying to new point into episode: " + episodeDate);
 
   try {
     if (
@@ -78,7 +78,7 @@ async function addPoint(point: IPoint, episodeId: string): Promise<IDBResponse> 
         errorMessage: "One or more fields are missing!" };
     }
 
-    const searcedEpisode = await Episode.findById(episodeId);
+    const searcedEpisode = await Episode.findOne().where({date : episodeDate});
 
     if (searcedEpisode) {
       const newPoint = new Point({
@@ -88,11 +88,13 @@ async function addPoint(point: IPoint, episodeId: string): Promise<IDBResponse> 
         competitor: point.description,
       });
       searcedEpisode.points.push(newPoint);
-      const updatedEpisode = await searcedEpisode.save();
+      await searcedEpisode.save();
+
+      //TODO: add check for saved episode
 
       return { success: true};
     } else {
-      console.log("Episode " + episodeId + " was not found!");
+      console.log("Episode " + episodeDate + " was not found!");
       return { 
         success: false,
         errorCode : 404,
