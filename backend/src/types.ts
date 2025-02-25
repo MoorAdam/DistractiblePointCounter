@@ -1,4 +1,7 @@
+import { ObjectId } from "mongoose";
+
 interface IPoint {
+  _id?: ObjectId;
   point: number;
   date: Date;
   competitor: string;
@@ -6,6 +9,7 @@ interface IPoint {
 }
 
 interface IEpisode {
+  _id?: ObjectId;
   date: Date;
   title?: string | "Untitled Episode";
   host: string;
@@ -13,14 +17,15 @@ interface IEpisode {
   winner: string | null;
   competitors: string[];
 }
-
-interface IError {
-  errorCode : number;
-  errorMessage : string;
+interface IDBResponse{
+  success : boolean;
+  errorCode? : number;
+  errorMessage? : string;
+  data? : any;
 }
 
 export {
-  IError,
+  IDBResponse,
   IPoint,
   IEpisode
 }

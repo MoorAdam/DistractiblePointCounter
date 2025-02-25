@@ -1,17 +1,17 @@
-import mongoose, { Schema, Document } from "mongoose";
-import {IEpisode, IPoint, IError} from "./types";
+import mongoose, { Schema, ObjectId } from "mongoose";
+import {IEpisode, IPoint, IDBResponse} from "./types";
 
 import * as dotenv from "dotenv";
 dotenv.config();
 
-const pointSchema = new mongoose.Schema<IPoint>({
+const pointSchema = new Schema<IPoint>({
   point : {type: Number, required: true},
   date: {type: Date, required: true},
   competitor: {type: String, required: true},
   description: {type: String, required: true}
 });
 
-const episodeSchema = new mongoose.Schema<IEpisode>({
+const episodeSchema = new Schema<IEpisode>({
   date: { type: Date, required: true },
   title: { type: String },
   host: { type: String, required: true },
@@ -33,7 +33,7 @@ async function connectDatabase() {
   }
 }
 
-async function getEpisodeByDate(date: string): Promise<IEpisode | IError> {
+async function getEpisodeByDate(date: string): Promise<IDBResponse> {
   try {
     console.log("Trying to query episde by date: " + date);
 
@@ -42,9 +42,10 @@ async function getEpisodeByDate(date: string): Promise<IEpisode | IError> {
     console.log("Search result: " + result);
 
     if (result != null) {
-      return result as IEpisode;
+      return {success: true};
     } else {
       return {
+        success: false,
         errorCode : 404,
         errorMessage:
           "Can't find episode with the provided date! Check if the format or the date is right!",
@@ -53,6 +54,7 @@ async function getEpisodeByDate(date: string): Promise<IEpisode | IError> {
   } catch (error) {
     console.log(error);
     return {
+      success: false,
       errorCode : 400,
       errorMessage:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",
@@ -60,7 +62,7 @@ async function getEpisodeByDate(date: string): Promise<IEpisode | IError> {
   }
 }
 
-async function addPoint(point: IPoint, episodeId: string): Promise<any> {
+async function addPoint(point: IPoint, episodeId: string): Promise<IDBResponse> {
   console.log("Trying to new point into episode: " + episodeId);
 
   try {
@@ -70,7 +72,10 @@ async function addPoint(point: IPoint, episodeId: string): Promise<any> {
       !point.description ||
       !point.competitor
     ) {
-      return { error: "One or mode fields are missing!" };
+      return { 
+        success: false,
+        errorCode : 400,
+        errorMessage: "One or more fields are missing!" };
     }
 
     const searcedEpisode = await Episode.findById(episodeId);
@@ -85,21 +90,26 @@ async function addPoint(point: IPoint, episodeId: string): Promise<any> {
       searcedEpisode.points.push(newPoint);
       const updatedEpisode = await searcedEpisode.save();
 
-      return updatedEpisode._id;
+      return { success: true};
     } else {
       console.log("Episode " + episodeId + " was not found!");
-      return { error: "Episode was not found" };
+      return { 
+        success: false,
+        errorCode : 404,
+        errorMessage: "Episode was not found" };
     }
   } catch (err) {
     console.log(err);
     return {
-      error:
+      success: false,
+      errorCode : 400,
+      errorMessage:
         "Something went wrong! Please check if request was submitted with the right data, in the right format!",
     };
   }
 }
 
-async function createEpisode(episode : IEpisode): Promise<IEpisode | IError> {
+async function createEpisode(episode : IEpisode): Promise<ObjectId | IError> {
   try {
     console.log("Trying to fetch episode with date: " + episode.date);
 
@@ -116,7 +126,7 @@ async function createEpisode(episode : IEpisode): Promise<IEpisode | IError> {
       });
       await newEpisode.save();
       console.log("New episode have been created! id: " + newEpisode._id);
-      return await Episode.findOne({ date: episode.date });
+      return (await Episode.findOne({ date: episode.date }))._id;
     } else {
       return { errorMessage: "Episode with this date already exists!" } as IError;
     }
