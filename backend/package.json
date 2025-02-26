@@ -4,7 +4,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongodb": "^6.13.1",
-    "mongoose": "^8.10.1"
+    "mongoose": "^8.10.1",
+    "uuid": "^11.1.0"
   },
   "name": "distractible-backend",
   "version": "1.0.0",

@@ -1,5 +1,6 @@
-import mongoose, { Schema, ObjectId } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import {IEpisode, IPoint, IDBResponse, INewEpisodeData, INewPointData} from "./types";
+import {v4 as uuidv4} from "uuid";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -22,7 +23,6 @@ const episodeSchema = new Schema<IEpisode>({
 });
 
 const Episode = mongoose.model("Episode", episodeSchema);
-const Point = mongoose.model("Point", pointSchema);
 
 async function connectDatabase() {
   try {
@@ -33,8 +33,6 @@ async function connectDatabase() {
     process.exit(1); // Exit process with failure
   }
 }
-
-
 
 async function getEpisodeByDate(date: string): Promise<IDBResponse> {
   try {
@@ -69,13 +67,9 @@ async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
   try {
 
       const newEpisode = new Episode({
-        recordingDate: episode.recordingDate,
-        host: episode.host,
-        competitors: episode.competitors,
-        title: episode.title,
+        ...episode, publicId : uuidv4()
       });
       await newEpisode.save();
-      console.log("New episode have been created! id: " + newEpisode._id);
       return { success: true };
   } catch (error) {
     console.log(error);
@@ -90,30 +84,30 @@ async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
 
 
 
-async function addPoint(point: Omit<IPoint, "_id">, episodeDate: string): Promise<IDBResponse> {
-  console.log("Trying to new point into episode: " + episodeDate);
+async function addPoint(point: Omit<IPoint, "_id">, episodeId: string): Promise<IDBResponse> {
+  console.log("Trying to new point into episode: " + episodeId);
 
   try {
 
-    const searcedEpisode = await Episode.findOne().where({date : episodeDate});
+    const searcedEpisode = await Episode.findOne().where({publicId : episodeId});
 
     //TODO: make new point uses the IPoint interface
 
     if (searcedEpisode) {
-      const newPoint = new Point({
-        point: point.point,
-        recordingDate: new Date(point.date),
-        description: point.date,
-        competitor: point.description,
-      });
+      const newPoint : IPoint = {
+        ...point, publicId : uuidv4()
+      };
+
       searcedEpisode.points.push(newPoint);
       await searcedEpisode.save();
 
-      //TODO: add check for saved episode
+      const updatedEpisode = await Episode.findOne().where({date : episodeId});
 
-      return { success: true};
+      //TODO: add check for saved episode, and its in the Points array
+
+      return { success: true, data: newPoint };
     } else {
-      console.log("Episode " + episodeDate + " was not found!");
+      console.log("Episode " + episodeId + " was not found!");
       return { 
         success: false,
         errorCode : 404,

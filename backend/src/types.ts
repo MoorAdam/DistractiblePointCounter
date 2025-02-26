@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 
 interface IPoint {
-  _id: ObjectId;
+  publicId : string,
   point: number;
   date: Date;
   competitor: string;
@@ -9,7 +9,7 @@ interface IPoint {
 }
 
 interface IEpisode {
-  _id: ObjectId;
+  publicId : string,
   recordingDate: Date;
   releaseDate?: Date;
   title?: string | "Untitled Episode";
@@ -25,8 +25,8 @@ interface IDBResponse<T = unknown>{
   data? : T | null;
 }
 
-type INewPointData = Omit<IPoint, "_id">;
-type INewEpisodeData = Omit<IEpisode, "_id">;
+type INewPointData = Omit<IPoint, "publicId">;
+type INewEpisodeData = Omit<IEpisode, "publicId">;
 
 export {
   INewEpisodeData,
