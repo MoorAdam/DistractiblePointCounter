@@ -70,11 +70,11 @@ app.post('/api/add-point-to-episode', async(req, res) => {
     const result = await dataBase.addPoint(point, episodeId);
 
     if(result.success){
-      res.status(result.errorCode);
-      res.send(result.errorMessage);
+      res.status(200);
+      res.send({pointId : result.data.publicId});
     }
     else{
-      res.status(200);
+      res.status(result.errorCode);
       res.send(result.errorMessage);
     }
 })

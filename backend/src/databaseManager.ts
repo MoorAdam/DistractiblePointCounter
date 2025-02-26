@@ -13,6 +13,7 @@ const pointSchema = new Schema<IPoint>({
 });
 
 const episodeSchema = new Schema<IEpisode>({
+  publicId : { type: String, required: true, unique: true},
   recordingDate: { type: Date, required: true},
   releaseDate : { type: Date, unique: true},
   title: { type: String },
@@ -70,7 +71,7 @@ async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
         ...episode, publicId : uuidv4()
       });
       await newEpisode.save();
-      return { success: true };
+      return { success: true, data: newEpisode.publicId };
   } catch (error) {
     console.log(error);
     return {
@@ -84,7 +85,7 @@ async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
 
 
 
-async function addPoint(point: Omit<IPoint, "_id">, episodeId: string): Promise<IDBResponse> {
+async function addPoint(point: INewPointData, episodeId: string): Promise<IDBResponse> {
   console.log("Trying to new point into episode: " + episodeId);
 
   try {
@@ -127,7 +128,7 @@ async function addPoint(point: Omit<IPoint, "_id">, episodeId: string): Promise<
 async function getAllPointsFromEpisode(episodeId: string): Promise<IDBResponse> {
   try {
 
-    const episode = await Episode.findOne().where({_id : episodeId});
+    const episode = await Episode.findOne().where({publicId : episodeId});
 
     if(episode != null){
         return <IDBResponse<IPoint[]>>{success : true, data : episode.points};
