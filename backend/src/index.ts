@@ -23,6 +23,8 @@ app.listen(port, () => {
   console.log(`The server is listening on port ${port}`)
 })
 
+//Episode based endpoints
+
 app.post('/api/create-episode', async (req, res) => {
 
   console.log(req.body);
@@ -59,6 +61,8 @@ app.get('/api/get-episode-by-date', async (req, res) => {
     res.send(result.errorMessage);
   }
 })
+
+//Point based endpoints
 
 app.post('/api/add-point-to-episode', async(req, res) => {
 

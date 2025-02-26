@@ -12,7 +12,7 @@ const pointSchema = new Schema<IPoint>({
 });
 
 const episodeSchema = new Schema<IEpisode>({
-  date: { type: Date, required: true },
+  date: { type: Date, required: true , unique: true},
   title: { type: String },
   host: { type: String, required: true },
   points: [pointSchema],
@@ -79,6 +79,8 @@ async function addPoint(point: IPoint, episodeDate: string): Promise<IDBResponse
     }
 
     const searcedEpisode = await Episode.findOne().where({date : episodeDate});
+
+    //TODO: make new point uses the IPoint interface
 
     if (searcedEpisode) {
       const newPoint = new Point({
