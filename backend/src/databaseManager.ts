@@ -86,7 +86,7 @@ async function addPoint(point: IPoint, episodeDate: string): Promise<IDBResponse
     if (searcedEpisode) {
       const newPoint = new Point({
         point: point.point,
-        date: new Date(point.date),
+        recordingDate: new Date(point.date),
         description: point.date,
         competitor: point.description,
       });
@@ -116,15 +116,9 @@ async function addPoint(point: IPoint, episodeDate: string): Promise<IDBResponse
 
 async function createEpisode(episode : IEpisode): Promise<IDBResponse> {
   try {
-    console.log("Trying to fetch episode with date: " + episode.date);
-
-    const searchResult = await Episode.find().where({ date: episode.date });
-
-    if (searchResult.length < 1) {
-      console.log("Episode not have been found! Trying to create new episode!");
 
       const newEpisode = new Episode({
-        date: episode.date,
+        recordingDate: episode.recordingDate,
         host: episode.host,
         competitors: episode.competitors,
         title: episode.title,
@@ -132,9 +126,6 @@ async function createEpisode(episode : IEpisode): Promise<IDBResponse> {
       await newEpisode.save();
       console.log("New episode have been created! id: " + newEpisode._id);
       return { success: true };
-    } else {
-      return { success: false, errorCode : 400, errorMessage: "Episode with this date already exists!" };
-    }
   } catch (error) {
     console.log(error);
     return {
@@ -149,7 +140,7 @@ async function createEpisode(episode : IEpisode): Promise<IDBResponse> {
 async function getAllPointsFromEpisode(episodeDate: string): Promise<IDBResponse> {
   try {
 
-    const episode = await Episode.findOne().where({date : episodeDate});
+    const episode = await Episode.findOne().where({recordingDate : episodeDate});
 
     if(episode != null){
         return {success : true, data : episode.points};
