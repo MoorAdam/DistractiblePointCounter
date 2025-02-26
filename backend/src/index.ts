@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
-import { IPoint, IEpisode, IDBResponse } from "./types";
+import { IPoint, IEpisode, IDBResponse, INewPointData, INewEpisodeData } from "./types";
 
 (async () => {
   try {
@@ -27,9 +27,7 @@ app.listen(port, () => {
 
 app.post('/api/create-episode', async (req, res) => {
 
-  console.log(req.body);
-
-  const newEpisode : IEpisode = req.body;
+  const newEpisode : INewEpisodeData = req.body;
 
   const response : IDBResponse= await dataBase.createEpisode(newEpisode);
 
@@ -66,10 +64,10 @@ app.get('/api/get-episode-by-date', async (req, res) => {
 
 app.post('/api/add-point-to-episode', async(req, res) => {
 
-    const point : IPoint = req.body.point
-    const episodeDate = req.body.episodeDate;
+    const point : INewPointData = req.body.point
+    const episodeId = req.body.episodeId;
 
-    const result = await dataBase.addPoint(point, episodeDate);
+    const result = await dataBase.addPoint(point, episodeId);
 
     if(result.success){
       res.status(result.errorCode);
@@ -80,9 +78,10 @@ app.post('/api/add-point-to-episode', async(req, res) => {
       res.send(result.errorMessage);
     }
 })
+
 app.get('/api/get-all-points-from-episode', async(req,res) => {
-  const date = req.body.date;
-  const result = await dataBase.getAllPointsFromEpisode(date);
+  const episodeId = req.body.episodeId;
+  const result = await dataBase.getAllPointsFromEpisode(episodeId);
   if(result.success){
     res.status(200);
     res.send(result.data);
