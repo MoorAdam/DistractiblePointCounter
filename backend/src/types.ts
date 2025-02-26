@@ -10,7 +10,8 @@ interface IPoint {
 
 interface IEpisode {
   _id?: ObjectId;
-  date: Date;
+  recordingDate: Date;
+  releaseDate?: Date;
   title?: string | "Untitled Episode";
   host: string;
   points: IPoint[];

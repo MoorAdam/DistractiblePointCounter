@@ -12,7 +12,8 @@ const pointSchema = new Schema<IPoint>({
 });
 
 const episodeSchema = new Schema<IEpisode>({
-  date: { type: Date, required: true , unique: true},
+  recordingDate: { type: Date, required: true},
+  releaseDate : { type: Date, unique: true},
   title: { type: String },
   host: { type: String, required: true },
   points: [pointSchema],
