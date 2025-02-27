@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import CompetitorBoard from "../components/CompetitorBoard";
+import CompetitorBoard from "../components/Boards page components/CompetitorBoard";
+import Modal from "../components/Modal";
 
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
 
-import CompetitorData from '../components/CompetitorData.js';
+import CompetitorData from '../components/Boards page components/CompetitorData.js';
+import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
 
 function Boards() {
+
+    const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
+
 
     interface winner {
         name : string,
@@ -63,21 +68,23 @@ function Boards() {
                 <div className={"menu-container glass-background content-inset menu-bar"}>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={resetPoints} >Reset Scores</button>
+                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={() => setNewEpisodeModalVisibility(true)} >Create new Episode</button>
                 </div>
             </div>
+            <Modal children={<CreateNewEpisodeFields/>} open={newEpisodeModalVisibility} onClose={setNewEpisodeModalVisibility}/>
             <div className={"container"}>
-            <CompetitorBoard
-                    competitorData={competitorData.Mark}
-                    addPoint={handleAddPoint}
-                />
                 <CompetitorBoard
-                    competitorData={competitorData.Bob}
-                    addPoint={handleAddPoint}
-                />
-                <CompetitorBoard
-                    competitorData={competitorData.Wade}
-                    addPoint={handleAddPoint}
-                />
+                        competitorData={competitorData.Mark}
+                        addPoint={handleAddPoint}
+                    />
+                    <CompetitorBoard
+                        competitorData={competitorData.Bob}
+                        addPoint={handleAddPoint}
+                    />
+                    <CompetitorBoard
+                        competitorData={competitorData.Wade}
+                        addPoint={handleAddPoint}
+                    />
             </div>
         </div>
     );
