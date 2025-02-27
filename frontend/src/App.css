@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
 html, body {
   margin-left: 5%;
   margin-right: 5%;
@@ -8,25 +11,6 @@ html, body {
   background-position: center;
   background-size: cover;
 }
-
-/*Modal*/
-
-.modal{
-  /*margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 90%;
-  height: 90vh;
-  text-align: center;
-  flex-direction: row;*/
-}
-
-.modal-holder{
-  margin: auto;
-}
-
-
 
 .interaction{
   background: rgba(0, 0, 0, 0.66);
@@ -43,10 +27,6 @@ html, body {
 .menu-bar{
   height: 10vh;
 }
-
-/* CompetitorHandle Board */
-
-/* Inputs */
 
 .number-input{
   width: 1%;
