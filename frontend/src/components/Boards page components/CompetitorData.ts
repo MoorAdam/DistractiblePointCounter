@@ -6,17 +6,17 @@ interface point{
 }
 
 export default class competitorData {
-    _competitorImage;
-    _competitorName : string;
-    _points : point[];
+    competitorImage;
+    competitorName : string;
+    points : point[];
 
     constructor(competitorName, competitorImage){
-        this._competitorImage = competitorImage;
-        this._competitorName = competitorName;
-        this._points = [];
+        this.competitorImage = competitorImage;
+        this.competitorName = competitorName;
+        this.points = [];
     }
     getName(){
-        return this._competitorName;
+        return this.competitorName;
     }
 
     addPoint(point, desc, creationDate){
@@ -25,21 +25,25 @@ export default class competitorData {
             desc : desc,
             creationDate : creationDate
         }
-        this._points.push(newPoint);
+        this.points.push(newPoint);
+    }
+
+    clearPoints(){
+        this.points = [];
     }
 
     getCompetitorImage(){
-        return this._competitorImage;
+        return this.competitorImage;
     }
 
     getAllPoints(){
-        return this._points;
+        return this.points;
     }
     tabulatePoints(){
 
         let sum= 0;
 
-        for (let point of this._points){
+        for (let point of this.points){
             sum = sum + point.point;
         }
 

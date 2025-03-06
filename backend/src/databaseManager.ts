@@ -15,7 +15,7 @@ const pointSchema = new Schema<IPoint>({
 const episodeSchema = new Schema<IEpisode>({
   publicId : { type: String, required: true, unique: true},
   recordingDate: { type: Date, required: true},
-  releaseDate : { type: Date, unique: true},
+  releaseDate : { type: Date},
   title: { type: String },
   host: { type: String, required: true },
   points: [pointSchema],
@@ -59,14 +59,14 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
       success: false,
       errorCode : 400,
       errorMessage:
-        "Something went wrong! Please check if request was submitted with the right data, in the right format!",
+        "Something went wrong! Please check if request was submitted with the right data, in the right format! " + error.errorMessage,
     };
   }
 }
 
 async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
   try {
-
+      console.log(episode);
       const newEpisode = new Episode({
         ...episode, publicId : uuidv4()
       });

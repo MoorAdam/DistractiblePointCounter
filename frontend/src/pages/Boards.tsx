@@ -11,8 +11,19 @@ import CreateNewEpisodeFields from '../components/Boards page components/CreateN
 
 function Boards() {
 
-    const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
+    const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>(null);
+    const [recordingDate, setRecordingDate] = useState<Date>(new Date(Date.now()));
+    const [releaseDate, setReleaseDate] = useState<Date>(null);
+    const [host, setHost] = useState<CompetitorData>(null);
 
+    interface Episode {
+        title? : string,
+        recordingDate : Date,
+        releaseDate? : Date,
+        competitors : string[],
+        host : string
+    }
 
     interface winner {
         name : string,
@@ -25,10 +36,57 @@ function Boards() {
         Wade: new CompetitorData("Wade", wadeImage),
     };
 
-    const [competitorData, setCompetitorData] = useState(initialData)
+    const [competitors, setCompetitors] = useState(initialData)
 
-    function resetPoints(){
-        setCompetitorData(initialData);
+    function createEpisodeFromStates(){
+        const episode : Episode = {
+            title : title ? title : null,
+            recordingDate : recordingDate,
+            releaseDate : releaseDate ? releaseDate : null,
+            competitors : Object.keys(competitors),
+            host : host.getName()
+        }
+        return episode;
+    }
+
+
+    async function createNewEpisode() {
+        //This function gets called by the create button. It creates a new Episode variable, with the inputed infor
+        //It sends a fetch to the backend. If the request is successful, it closes the modal, and clears all the points
+
+        try{
+
+            console.log(createEpisodeFromStates());
+
+            const url = "/api/create-episode";
+            const response = await fetch(url, {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/JSON"
+                },
+                body : JSON.stringify(createEpisodeFromStates())
+            })
+            if(!response.ok){
+                console.error("Check the inputs. Something is not right: " + response.toString());
+            }
+            else{
+                clearAllPoints();
+                setNewEpisodeModalVisibility(false);
+                clearAllPoints();
+            }
+
+            
+        }
+        catch(e){
+            console.error(e.message);
+
+            //TODO: write to modal: something happened
+        }
+
+    }
+
+    function clearAllPoints(){
+        this.setCompetitors = Object.entries(competitors).map((comp) => comp[1].clearPoints()) 
     }
 
     function handleAddPoint(competitorName, point, desc, creationDate){
@@ -38,9 +96,9 @@ function Boards() {
             alert("By the Laws of the Constitution, you have to write a description! (I can see you Wade....)");
         }
         else{
-            const updatedData = { ...competitorData };
+            const updatedData = { ...competitors };
             updatedData[competitorName].addPoint(point, desc, creationDate);
-            setCompetitorData(updatedData);
+            setCompetitors(updatedData);
         }
 
     }
@@ -48,12 +106,12 @@ function Boards() {
     function calculateWinner(){
         let maxPoints : number = Number.MIN_VALUE
         let winner = null;
-        for (let competitorName in competitorData) {
-            const points = competitorData[competitorName].tabulatePoints();
+        for (let competitorName in competitors) {
+            const points = competitors[competitorName].tabulatePoints();
             if (points > maxPoints) {
                 winner = {
                     name : competitorName,
-                    data : competitorData[competitorName]
+                    data : competitors[competitorName]
                 }
                 maxPoints = points;
             }
@@ -62,27 +120,36 @@ function Boards() {
         return winner;
     }
 
+    const createEpisodeFieldsProps = {
+        episodeTitle : (t : string) => setTitle(t),
+        recordingDate : (t : Date) => setRecordingDate(t),
+        releaseDate : (t : Date) => setReleaseDate(t),
+        host : (t : string) => setHost(competitors[t]),
+        onSubmit : createNewEpisode,
+        onCancel : () => setNewEpisodeModalVisibility(false)
+    }
+
     return(
         <div>
             <div>
                 <div className={"menu-container glass-background content-inset menu-bar"}>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
-                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={resetPoints} >Reset Scores</button>
+                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={clearAllPoints} >Reset Scores</button>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={() => setNewEpisodeModalVisibility(true)} >Create new Episode</button>
                 </div>
             </div>
-            <Modal children={<CreateNewEpisodeFields/>} open={newEpisodeModalVisibility} onClose={setNewEpisodeModalVisibility}/>
+            <Modal children={<CreateNewEpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
             <div className={"container"}>
                 <CompetitorBoard
-                        competitorData={competitorData.Mark}
+                        competitorData={competitors.Mark}
                         addPoint={handleAddPoint}
                     />
                     <CompetitorBoard
-                        competitorData={competitorData.Bob}
+                        competitorData={competitors.Bob}
                         addPoint={handleAddPoint}
                     />
                     <CompetitorBoard
-                        competitorData={competitorData.Wade}
+                        competitorData={competitors.Wade}
                         addPoint={handleAddPoint}
                     />
             </div>
