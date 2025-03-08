@@ -1,14 +1,8 @@
-
-interface point{
-    point : number,
-    desc : string,
-    creationDate : Date
-}
-
-export default class competitorData {
+import {Point} from '@types';
+export default class Competitor {
     _competitorImage;
     _competitorName : string;
-    _points : point[];
+    _points : Point[];
 
     constructor(competitorName, competitorImage){
         this._competitorImage = competitorImage;
@@ -19,17 +13,22 @@ export default class competitorData {
         return this._competitorName;
     }
 
-    addPoint(point, desc, creationDate){
-        const newPoint : point = {
+    addPoint(point, desc){
+        //TODO: Make it less spaghetti
+        const newPoint : Point = {
             point : parseInt(point),
-            desc : desc,
-            creationDate : creationDate
+            description : desc,
+            creationDate : new Date(Date.now()),
         }
         this._points.push(newPoint);
     }
 
     getCompetitorImage(){
         return this._competitorImage;
+    }
+
+    getNames(){
+        return this._competitorName;
     }
 
     getAllPoints(){

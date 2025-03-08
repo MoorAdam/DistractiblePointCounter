@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import CompetitorBoard from "../components/Boards page components/CompetitorBoard";
 import Modal from "../components/Modal";
+import {NavItem} from "@types";
 
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
 
-import CompetitorData from '../components/Boards page components/CompetitorData.js';
+import CompetitorData from '../components/Boards page components/Competitor.js';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
+import NavBar from '../components/NavBar';
 
 function Boards() {
 
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
+    const [winner, setWinner] = useState(null);
 
-
-    interface winner {
-        name : string,
-        data : string[]
-    }
+    const [winnerModal, setWinnerModal] = useState(false);
 
     const initialData = {
         Mark: new CompetitorData("Mark", markImage),
@@ -45,6 +44,16 @@ function Boards() {
 
     }
 
+    const buttonStyle = "btn btn-outline btn-success";
+
+    const navBarItems: NavItem[] = [
+        {buttonText: "calculateWinner", onclick: calculateWinner, buttonStyle : buttonStyle},
+        {buttonText: "resetPoints", onclick: resetPoints, buttonStyle : buttonStyle},
+        {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle}
+    ];
+
+
+
     function calculateWinner(){
         let maxPoints : number = Number.MIN_VALUE
         let winner = null;
@@ -58,21 +67,20 @@ function Boards() {
                 maxPoints = points;
             }
         }
-        alert(winner.name + " : " + winner.data.tabulatePoints());
+        setWinner(winner);
+        setWinnerModal(true);
         return winner;
     }
 
     return(
         <div>
+            <Modal children={<p1>Not working yet</p1>} open={winnerModal} onClose={setWinnerModal}/>
             <div>
-                <div className={"menu-container glass-background content-inset menu-bar"}>
-                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
-                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={resetPoints} >Reset Scores</button>
-                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={() => setNewEpisodeModalVisibility(true)} >Create new Episode</button>
-                </div>
+                <NavBar children={navBarItems}/>
             </div>
-            <Modal children={<CreateNewEpisodeFields/>} open={newEpisodeModalVisibility} onClose={setNewEpisodeModalVisibility}/>
-            <div className={"container"}>
+            
+            {winnerModal ? <Modal children={<CreateNewEpisodeFields/>} open={newEpisodeModalVisibility} onClose={setNewEpisodeModalVisibility}/> : null} 
+            <div className={"flex gap-4 m-4 h-full"}>
                 <CompetitorBoard
                         competitorData={competitorData.Mark}
                         addPoint={handleAddPoint}
