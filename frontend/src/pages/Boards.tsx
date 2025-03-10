@@ -74,7 +74,7 @@ function Boards() {
 
     return(
         <div>
-            <Modal children={<p1>Not working yet</p1>} open={winnerModal} onClose={setWinnerModal}/>
+            <Modal children={"<p1>Not working yet</p1>"} open={winnerModal} onClose={setWinnerModal}/>
             <div>
                 <NavBar children={navBarItems}/>
             </div>

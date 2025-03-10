@@ -25,7 +25,7 @@ app.listen(port, () => {
 
 //Episode based endpoints
 
-app.post('/api/create-episode', async (req, res) => {
+app.post('/api/create-episode', async (req: { body: INewEpisodeData; }, res: { status: (arg0: number) => void; send: (arg0: string | IDBResponse<unknown>) => void; }) => {
 
   const newEpisode : INewEpisodeData = req.body;
 
@@ -43,7 +43,7 @@ app.post('/api/create-episode', async (req, res) => {
   }
 })
 
-app.get('/api/get-episode-by-date', async (req, res) => {
+app.get('/api/get-episode-by-date', async (req: { body: { date: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
 
   //TODO validate date!
 
@@ -79,7 +79,7 @@ app.post('/api/add-point-to-episode', async(req, res) => {
     }
 })
 
-app.get('/api/get-all-points-from-episode', async(req,res) => {
+app.get('/api/get-all-points-from-episode', async(req: { body: { episodeId: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
   const episodeId = req.body.episodeId;
   const result = await dataBase.getAllPointsFromEpisode(episodeId);
   if(result.success){
