@@ -11,7 +11,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node comp/index.js",
+    "prestart": "npm run build",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +22,7 @@
   "devDependencies": {
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.13.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
 }
