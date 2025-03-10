@@ -114,7 +114,7 @@ function Boards() {
         }
         else{
 
-            const response = await submitNewPoint(newPoint);
+            await submitNewPoint(newPoint);
 
             const updatedData = { ...competitors };
             updatedData[newPoint.competitor].addPoint(newPoint);
