@@ -62,10 +62,12 @@ app.get('/api/get-episode-by-date', async (req: { body: { date: any; }; }, res: 
 
 //Point based endpoints
 
-app.post('/api/add-point-to-episode', async(req, res) => {
+app.post('/api/add-point', async(req, res) => {
 
     const point : INewPointData = req.body.point
     const episodeId = req.body.episodeId;
+
+    console.log(req.body)
 
     const result = await dataBase.addPoint(point, episodeId);
 

@@ -24,12 +24,7 @@ export default class competitorData {
         return this.isHost;
     }
 
-    addPoint(point: string, desc: any, creationDate: any){
-        const newPoint : Point = {
-            point : parseInt(point),
-            description : desc,
-            creationDate : creationDate
-        }
+    addPoint(newPoint : Point){
         this.points.push(newPoint);
     }
 

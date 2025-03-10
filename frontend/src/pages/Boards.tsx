@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import CompetitorBoard from "../components/Boards page components/CompetitorBoard";
 import Modal from "../components/Modal";
-import {NavItem} from "@types";
+import {NavItem, Point} from "@types";
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
+
+const POST_POINT_URL = "/api/add-point";
+const POST_NEW_EPISODE_URL = "/api/create-episode";
 
 import CompetitorData from '../components/Boards page components/Competitor';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
@@ -35,8 +38,6 @@ function Boards() {
         host : string
     }
 
-
-
     function createEpisodeFromStates(){
         const episode : Episode = {
             title : title ? title : null,
@@ -47,8 +48,7 @@ function Boards() {
         }
         return episode;
     }
-
-
+    
     async function createNewEpisode() {
         //This function gets called by the create button. It creates a new Episode variable, with the input information
         //It sends a fetch to the backend. If the request is successful, it closes the modal, and clears all the points
@@ -60,8 +60,7 @@ function Boards() {
             }
             else{
                 setError("");
-                const url = "/api/create-episode";
-                const response = await fetch(url, {
+                const response = await fetch(POST_NEW_EPISODE_URL, {
                     method : "POST",
                     headers : {
                         "Content-Type" : "application/JSON"
@@ -99,22 +98,66 @@ function Boards() {
         });
     }
 
-
-    function handleAddPoint(competitorName: string, point: string, desc: string, creationDate: string){
+    async function handleAddPoint(newPoint : Point){
 
         //When a new point has been submitted, the system adds a point to the scoreboard. This point is grayed out, till the backend returns with success
         //This will be achieved with a custom promise. If it succeeds, it will make the point black, and make the right sound(depending on if the point is positive or negative)
         //If it fails, it will display a modal that suggest the problem. Most likely backend problems
 
 
-        console.log(competitorName + " " + point +  " " + desc +  " " + creationDate);
-        if (desc === ''){
+        //TODO: make the point effect described above
+
+        console.log("newPoint : " + JSON.stringify(newPoint));
+
+        if (newPoint.description === ''){
             alert("By the Laws of the Constitution, you have to write a description! (I can see you Wade....)");
         }
         else{
+
+            const response = await submitNewPoint(newPoint);
+
             const updatedData = { ...competitors };
-            updatedData[competitorName].addPoint(point, desc, creationDate);
+            updatedData[newPoint.competitor].addPoint(newPoint);
             setCompetitors(updatedData);
+        }
+
+    }
+
+
+    //TODO: try making this into a promise, if possible/valuable
+
+
+    //when a new point comes in, we create a new point. We keep the reference to it, so we can change the color later
+    //We add this point to the board.
+    //we send a request to the backend, and wait for the response.
+    //if its successful, we change the color to black, and play a sound
+    //If its not, we send a message to the user, and remove the point
+
+
+    async function submitNewPoint(newPoint : Point){
+        try{
+            console.log("Trying to submit new Point")
+            const response = await fetch(POST_POINT_URL, {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/JSON"
+                },
+                body : JSON.stringify({
+                    episodeId : localStorage.getItem("episodeId"),
+                    point : newPoint
+                })
+            });
+            if (response.ok){
+                console.log("point was submitted")
+            }
+            else {
+                console.log("nope...")
+            }
+            return await response.json();
+        }
+        catch (e) {
+            console.log(e.message )
+            setError(e.message)
         }
 
     }
@@ -126,8 +169,6 @@ function Boards() {
         {buttonText: "resetPoints", onclick: clearCompetitorData, buttonStyle : buttonStyle},
         {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle}
     ];
-
-
 
     function calculateWinner(){
         let maxPoints : number = Number.MIN_VALUE
@@ -182,7 +223,6 @@ function Boards() {
             </div>
         </div>
     );
-
 }
 
 export default Boards;

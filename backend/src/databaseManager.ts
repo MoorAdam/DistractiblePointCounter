@@ -91,7 +91,7 @@ async function createEpisode(episode: INewEpisodeData): Promise<IDBResponse> {
     }
     return {
       success: false,
-      errorCode: 500,
+      errorCode: 400,
       errorMessage: `Error saving episode: ${error.message}`, // Access `message` correctly
     };
   }
