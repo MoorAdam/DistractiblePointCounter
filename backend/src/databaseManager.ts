@@ -12,6 +12,8 @@ const pointSchema = new Schema<IPoint>({
   description: {type: String, required: true}
 });
 
+//TODO: The release and recording dates dont need to be unique
+
 const episodeSchema = new Schema<IEpisode>({
   publicId : { type: String, required: true, unique: true},
   recordingDate: { type: Date, required: true},
@@ -71,7 +73,7 @@ async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
         ...episode, publicId : uuidv4()
       });
       await newEpisode.save();
-      return { success: true, data: newEpisode.publicId };
+      return { success: true, data: {episodeId : newEpisode.publicId}};
   } catch (error) {
     console.log(error);
     return {
@@ -90,17 +92,17 @@ async function addPoint(point: INewPointData, episodeId: string): Promise<IDBRes
 
   try {
 
-    const searcedEpisode = await Episode.findOne().where({publicId : episodeId});
+    const searchedEpisode = await Episode.findOne().where({publicId : episodeId});
 
     //TODO: make new point uses the IPoint interface
 
-    if (searcedEpisode) {
+    if (searchedEpisode) {
       const newPoint : IPoint = {
         ...point, publicId : uuidv4()
       };
 
-      searcedEpisode.points.push(newPoint);
-      await searcedEpisode.save();
+      searchedEpisode.points.push(newPoint);
+      await searchedEpisode.save();
 
       const updatedEpisode = await Episode.findOne().where({date : episodeId});
 

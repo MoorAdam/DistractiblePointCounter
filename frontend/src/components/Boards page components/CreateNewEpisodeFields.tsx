@@ -1,10 +1,16 @@
 import React from "react";
 
+function formPreventDefault(e: { preventDefault: () => void; }){
+    e.preventDefault();
+}
+
+//TODO: make multiple host selectable
+
 export default function CreateNewEpisodeFields({episodeTitle, recordingDate, releaseDate, host, onSubmit, onCancel, errorMessage}) {
     return (
-        <form className="flex flex-col">
+        <form className="flex flex-col" onSubmit={formPreventDefault}>
             <label className="text-sm font-semibold text-gray-400">Episode title (You can set it after the episode ends)</label>
-            <input type="text" onChange={(e) => episodeTitle(e.target.value)} required className="border border-gray-300 p-2 mt-1" />
+            <input type="text" onChange={(e) => episodeTitle(e.target.value)} className="border border-gray-300 p-2 mt-1" />
 
             <label className="text-sm font-semibold text-gray-400 mt-4">★ Recording date</label>
             <input required={true} onChange={(e) => recordingDate(e.target.value)} type="date" className="border border-gray-300 p-2 mt-1"/>
@@ -13,8 +19,8 @@ export default function CreateNewEpisodeFields({episodeTitle, recordingDate, rel
             <input type="date" onChange={(e) => releaseDate(e.target.value)} className="border border-gray-300 p-2 mt-1" />
 
             <label className="text-sm font-semibold text-gray-400 mt-4">★ Host</label>
-            <select required={true} defaultValue={"Choose a host!"} onChange={(e) => host(e.target.value)} className="border border-gray-300 w-full p-2 mt-1 select">
-                <option disabled hidden>Choose a host!</option>
+            <select required={true} defaultValue={""} onChange={(e) => host(e.target.value)} className="border border-gray-300 w-full p-2 mt-1 select">
+                <option disabled value={""}>Choose a host!</option>
                 <option value="Mark">Mark</option>
                 <option value="Bob">Bob</option>
                 <option value="Wade">Wade</option>

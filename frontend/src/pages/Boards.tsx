@@ -13,11 +13,20 @@ import NavBar from '../components/NavBar';
 
 function Boards() {
 
+    const initialData = {
+        Mark: new CompetitorData("Mark", markImage),
+        Bob: new CompetitorData("Bob", bobImage),
+        Wade: new CompetitorData("Wade", wadeImage),
+    };
+
+    //TODO: make the host's pfp glow when they are the host
+
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState<boolean>(false);
     const [title, setTitle] = useState<string>(null);
     const [recordingDate, setRecordingDate] = useState<Date>(new Date(Date.now()));
     const [releaseDate, setReleaseDate] = useState<Date>(null);
     const [host, setHost] = useState<CompetitorData>(null);
+    const [competitors, setCompetitors] = useState(initialData)
 
     const [error, setError] = useState<string>("");
 
@@ -29,13 +38,7 @@ function Boards() {
         host : string
     }
 
-    const initialData = {
-        Mark: new CompetitorData("Mark", markImage),
-        Bob: new CompetitorData("Bob", bobImage),
-        Wade: new CompetitorData("Wade", wadeImage),
-    };
 
-    const [competitors, setCompetitors] = useState(initialData)
 
     function createEpisodeFromStates(){
         const episode : Episode = {
@@ -70,25 +73,34 @@ function Boards() {
                 })
 
                 if(!response.ok){
-                    setError(response.toString());
+                    const error = await response.json();
+                    setError(error);
+                    return
                 }
-                else{
-                    clearAllPoints();
-                    setNewEpisodeModalVisibility(false);
-                    clearAllPoints();
-                }
+
+                const responseData = await response.json();
+
+                localStorage.setItem("episodeId", responseData.episodeId);
+                console.log("trying to create episode and close everything")
+                clearAllPoints();
+                setNewEpisodeModalVisibility(false);
             }
         }
         catch(e){
-            setError(e.message)
+            //setError(e.message)
             //TODO: write to modal: something happened
         }
 
     }
 
-    function clearAllPoints(){
-        this.setCompetitors = Object.entries(competitors).map((comp) => comp[1].clearPoints())
+    function clearAllPoints() {
+        setCompetitors((prevCompetitors) => {
+            const updatedCompetitors = { ...prevCompetitors };
+            Object.values(updatedCompetitors).forEach((comp) => comp.clearPoints());
+            return updatedCompetitors;
+        });
     }
+
 
     function handleAddPoint(competitorName, point, desc, creationDate){
 
