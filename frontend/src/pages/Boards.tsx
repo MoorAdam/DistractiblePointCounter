@@ -17,17 +17,14 @@ function Boards() {
     const [releaseDate, setReleaseDate] = useState<Date>(null);
     const [host, setHost] = useState<CompetitorData>(null);
 
+    const [error, setError] = useState<string>("");
+
     interface Episode {
         title? : string,
         recordingDate : Date,
         releaseDate? : Date,
         competitors : string[],
         host : string
-    }
-
-    interface winner {
-        name : string,
-        data : string[]
     }
 
     const initialData = {
@@ -56,30 +53,32 @@ function Boards() {
 
         try{
 
-            console.log(createEpisodeFromStates());
-
-            const url = "/api/create-episode";
-            const response = await fetch(url, {
-                method : "POST",
-                headers : {
-                    "Content-Type" : "application/JSON"
-                },
-                body : JSON.stringify(createEpisodeFromStates())
-            })
-            if(!response.ok){
-                console.error("Check the inputs. Something is not right: " + response.toString());
+            if(!host || !recordingDate){
+                setError("You must fill all required fields!");
             }
             else{
-                clearAllPoints();
-                setNewEpisodeModalVisibility(false);
-                clearAllPoints();
+                setError("");
+                const url = "/api/create-episode";
+                const response = await fetch(url, {
+                    method : "POST",
+                    headers : {
+                        "Content-Type" : "application/JSON"
+                    },
+                    body : JSON.stringify(createEpisodeFromStates())
+                })
+                
+                if(!response.ok){
+                    setError(response.toString());
+                }
+                else{
+                    clearAllPoints();
+                    setNewEpisodeModalVisibility(false);
+                    clearAllPoints();
+                }
             }
-
-            
         }
         catch(e){
-            console.error(e.message);
-
+            setError(e.message)
             //TODO: write to modal: something happened
         }
 
@@ -126,7 +125,8 @@ function Boards() {
         releaseDate : (t : Date) => setReleaseDate(t),
         host : (t : string) => setHost(competitors[t]),
         onSubmit : createNewEpisode,
-        onCancel : () => setNewEpisodeModalVisibility(false)
+        onCancel : () => setNewEpisodeModalVisibility(false),
+        errorMessage : error
     }
 
     return(
@@ -134,7 +134,6 @@ function Boards() {
             <div>
                 <div className={"menu-container glass-background content-inset menu-bar"}>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={calculateWinner}>Calculate winner</button>
-                    <button className={"item menu-item interaction content-inset three-dimensional"} onClick={clearAllPoints} >Reset Scores</button>
                     <button className={"item menu-item interaction content-inset three-dimensional"} onClick={() => setNewEpisodeModalVisibility(true)} >Create new Episode</button>
                 </div>
             </div>

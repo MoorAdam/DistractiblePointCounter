@@ -1,10 +1,10 @@
 import React from "react";
 
-export default function CreateNewEpisodeFields({episodeTitle, recordingDate, releaseDate, host, onSubmit, onCancel}) {
+export default function CreateNewEpisodeFields({episodeTitle, recordingDate, releaseDate, host, onSubmit, onCancel, errorMessage}) {
     return (
-        <div className="flex flex-col">
+        <form className="flex flex-col">
             <label className="text-sm font-semibold text-gray-400">Episode title (You can set it after the episode ends)</label>
-            <input type="text" onChange={(e) => episodeTitle(e.target.value)} className="border border-gray-300 p-2 mt-1" />
+            <input type="text" onChange={(e) => episodeTitle(e.target.value)} required className="border border-gray-300 p-2 mt-1" />
 
             <label className="text-sm font-semibold text-gray-400 mt-4">★ Recording date</label>
             <input required={true} onChange={(e) => recordingDate(e.target.value)} type="date" className="border border-gray-300 p-2 mt-1"/>
@@ -19,8 +19,10 @@ export default function CreateNewEpisodeFields({episodeTitle, recordingDate, rel
                 <option value="Bob">Bob</option>
                 <option value="Wade">Wade</option>
             </select>
-            <button className="bg-blue-500 text-white p-2 mt-4" onClick={onSubmit}>Create Episode</button>
+            <p className="text-red-600">{errorMessage ? errorMessage : ""}</p>
+
+            <button type="submit" className="bg-blue-500 text-white p-2 mt-4" onClick={onSubmit}>Create Episode</button>
             <button className="bg-blue-500 text-white p-2 mt-4" onClick={onCancel}>Cancel</button>
-        </div>
+        </form>
     );
 }
