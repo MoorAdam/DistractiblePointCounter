@@ -39,7 +39,7 @@ async function connectDatabase() {
 
 async function getEpisodeByDate(date: string): Promise<IDBResponse> {
   try {
-    console.log("Trying to query episde by date: " + date);
+    console.log("Trying to query episode by date: " + date);
 
     const result : IEpisode = await Episode.findOne().where({ date: new Date(date) });
 
@@ -65,22 +65,34 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
     };
   }
 }
+async function createEpisode(episode: INewEpisodeData): Promise<IDBResponse> {
 
-async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
+  //TODO: return proper error messages
+
   try {
-      console.log(episode);
-      const newEpisode = new Episode({
-        ...episode, publicId : uuidv4()
-      });
-      await newEpisode.save();
-      return { success: true, data: {episodeId : newEpisode.publicId}};
+    console.log(episode);
+    const newEpisode = new Episode({
+      ...episode,
+      publicId: uuidv4(),
+    });
+
+    await newEpisode.save(); // Await without callback
+
+    return { success: true, data: { episodeId: newEpisode.publicId } };
   } catch (error) {
-    console.log(error);
+
+    if(error.code === 11000){
+      console.log(`full error: ${error}`)
+      return {
+        success: false,
+        errorCode: 409,
+        errorMessage: `An episode with these properties already exists`, // Access `message` correctly
+      };
+    }
     return {
       success: false,
-      errorCode : 400,
-      errorMessage:
-        "Something went wrong! Please check if request was submitted with the right data, in the right format!",
+      errorCode: 500,
+      errorMessage: `Error saving episode: ${error.message}`, // Access `message` correctly
     };
   }
 }

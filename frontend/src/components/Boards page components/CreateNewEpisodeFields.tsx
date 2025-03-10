@@ -5,6 +5,7 @@ function formPreventDefault(e: { preventDefault: () => void; }){
 }
 
 //TODO: make multiple host selectable
+//TODO: make the fields ony change states after Submit
 
 export default function CreateNewEpisodeFields({episodeTitle, recordingDate, releaseDate, host, onSubmit, onCancel, errorMessage}) {
     return (

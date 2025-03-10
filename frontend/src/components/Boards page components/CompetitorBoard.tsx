@@ -1,5 +1,5 @@
 import React, {useLayoutEffect} from 'react';
-import Point from './Point';
+import {Point} from "@types";
 
 
 
@@ -8,6 +8,8 @@ function CompetitorBoard({addPoint, competitorData}) {
     const competitorName = competitorData.getName();
     const imageUrl = competitorData.getCompetitorImage();
     const points = competitorData.getAllPoints();
+
+    const isHost = competitorData.getIsHost();
 
     const [pointDescription, setPointDescription] = React.useState<string>("");
     const [pointValue, setPointValue] = React.useState<number>(0);
@@ -23,7 +25,7 @@ function CompetitorBoard({addPoint, competitorData}) {
             <div className="m-4">
                 <div className={"competitor-bar-profile"}>
                     <div className={"flex gap-4"}>
-                        <img className={"rounded-box"} src={imageUrl} alt="CompetitorHandle image"/>
+                        <img className={`rounded-box`} src={imageUrl} alt="CompetitorHandle image"/>
                         <h1 className={"align-middle pt-15 pl-20"}>{competitorName} : {currentPointSum}</h1>
                     </div>
                 </div>
@@ -43,13 +45,13 @@ function CompetitorBoard({addPoint, competitorData}) {
                         </thead>
                         <tbody>
                             {
-                                    points.map((value, index) => (
-                                        <tr>
-                                            <td>{value.point}</td>
-                                            <td>{value.description}</td>
-                                            <td>{value.creationDate.getHours() + ":" + value.creationDate.getMinutes()}</td>
-                                        </tr>
-                                    ))
+                                points.map((value: Point, index : number) => (
+                                    <tr>
+                                        <td>{value.point}</td>
+                                        <td>{value.description}</td>
+                                        <td>{value.creationDate.getHours() + ":" + value.creationDate.getMinutes()}</td>
+                                    </tr>
+                                ))
                             }
                         </tbody>
                     </table>

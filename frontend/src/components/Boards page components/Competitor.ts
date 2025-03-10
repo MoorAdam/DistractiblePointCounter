@@ -1,16 +1,13 @@
 
-interface point{
-    point : number,
-    desc : string,
-    creationDate : Date
-}
+import {Point} from "@types";
 
 export default class competitorData {
-    competitorImage;
+    competitorImage : string;
+    isHost : boolean;
     competitorName : string;
-    points : point[];
+    points : Point[];
 
-    constructor(competitorName, competitorImage){
+    constructor(competitorName: string, competitorImage: string){
         this.competitorImage = competitorImage;
         this.competitorName = competitorName;
         this.points = [];
@@ -19,10 +16,18 @@ export default class competitorData {
         return this.competitorName;
     }
 
-    addPoint(point, desc, creationDate){
-        const newPoint : point = {
+    setIsHost(isHost : boolean){
+        this.isHost = isHost;
+    }
+
+    getIsHost(){
+        return this.isHost;
+    }
+
+    addPoint(point: string, desc: any, creationDate: any){
+        const newPoint : Point = {
             point : parseInt(point),
-            desc : desc,
+            description : desc,
             creationDate : creationDate
         }
         this.points.push(newPoint);

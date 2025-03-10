@@ -34,14 +34,11 @@ app.post('/api/create-episode', async (req: { body: INewEpisodeData; }, res: { s
   console.log(response);
 
   if(response.success){
-
-      const episodeId : string = response.data;
-
     res.status(201);
     res.send(response.data);
   }
   else{
-    res.status(409);
+    res.status(response.errorCode);
     res.send(response.errorMessage);
   }
 })

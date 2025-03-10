@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import CompetitorBoard from "../components/Boards page components/CompetitorBoard";
 import Modal from "../components/Modal";
 import {NavItem} from "@types";
-
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
@@ -18,8 +17,6 @@ function Boards() {
         Bob: new CompetitorData("Bob", bobImage),
         Wade: new CompetitorData("Wade", wadeImage),
     };
-
-    //TODO: make the host's pfp glow when they are the host
 
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState<boolean>(false);
     const [title, setTitle] = useState<string>(null);
@@ -53,7 +50,7 @@ function Boards() {
 
 
     async function createNewEpisode() {
-        //This function gets called by the create button. It creates a new Episode variable, with the inputed infor
+        //This function gets called by the create button. It creates a new Episode variable, with the input information
         //It sends a fetch to the backend. If the request is successful, it closes the modal, and clears all the points
 
         try{
@@ -74,6 +71,7 @@ function Boards() {
 
                 if(!response.ok){
                     const error = await response.json();
+                    console.log(error);
                     setError(error);
                     return
                 }
@@ -82,7 +80,7 @@ function Boards() {
 
                 localStorage.setItem("episodeId", responseData.episodeId);
                 console.log("trying to create episode and close everything")
-                clearAllPoints();
+                clearCompetitorData();
                 setNewEpisodeModalVisibility(false);
             }
         }
@@ -93,16 +91,21 @@ function Boards() {
 
     }
 
-    function clearAllPoints() {
+    function clearCompetitorData() {
         setCompetitors((prevCompetitors) => {
             const updatedCompetitors = { ...prevCompetitors };
-            Object.values(updatedCompetitors).forEach((comp) => comp.clearPoints());
+            Object.values(updatedCompetitors).forEach(function(comp){comp.clearPoints(); comp.setIsHost(false)});
             return updatedCompetitors;
         });
     }
 
 
-    function handleAddPoint(competitorName, point, desc, creationDate){
+    function handleAddPoint(competitorName: string, point: string, desc: string, creationDate: string){
+
+        //When a new point has been submitted, the system adds a point to the scoreboard. This point is grayed out, till the backend returns with success
+        //This will be achieved with a custom promise. If it succeeds, it will make the point black, and make the right sound(depending on if the point is positive or negative)
+        //If it fails, it will display a modal that suggest the problem. Most likely backend problems
+
 
         console.log(competitorName + " " + point +  " " + desc +  " " + creationDate);
         if (desc === ''){
@@ -120,7 +123,7 @@ function Boards() {
 
     const navBarItems: NavItem[] = [
         {buttonText: "calculateWinner", onclick: calculateWinner, buttonStyle : buttonStyle},
-        {buttonText: "resetPoints", onclick: clearAllPoints, buttonStyle : buttonStyle},
+        {buttonText: "resetPoints", onclick: clearCompetitorData, buttonStyle : buttonStyle},
         {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle}
     ];
 
@@ -144,13 +147,17 @@ function Boards() {
     }
 
     const createEpisodeFieldsProps = {
-        episodeTitle : (t : string) => setTitle(t),
-        recordingDate : (t : Date) => setRecordingDate(t),
-        releaseDate : (t : Date) => setReleaseDate(t),
-        host : (t : string) => setHost(competitors[t]),
-        onSubmit : createNewEpisode,
-        onCancel : () => setNewEpisodeModalVisibility(false),
-        errorMessage : error
+        "episodeTitle": (t : string) => setTitle(t),
+        "recordingDate" : (t : Date) => setRecordingDate(t),
+        "releaseDate" : (t : Date) => setReleaseDate(t),
+        "host" : function (t : string) {
+            const host = competitors[t];
+            host.setIsHost(true);
+            setHost(host);
+        },
+        "onSubmit" : createNewEpisode,
+        "onCancel" : () => setNewEpisodeModalVisibility(false),
+        "errorMessage" : error
     }
 
     return(
