@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
-import { IPoint, IEpisode, IDBResponse, INewPointData, INewEpisodeData } from "./types";
+import {IDBResponse, INewPointData, INewEpisodeData } from "./types";
 
 (async () => {
   try {

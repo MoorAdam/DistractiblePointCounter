@@ -9,8 +9,6 @@ function CompetitorBoard({addPoint, competitorData}) {
     const imageUrl = competitorData.getCompetitorImage();
     const points = competitorData.getAllPoints();
 
-    const isHost = competitorData.getIsHost();
-
     const [pointDescription, setPointDescription] = React.useState<string>("");
     const [pointValue, setPointValue] = React.useState<number>(0);
 
@@ -45,7 +43,7 @@ function CompetitorBoard({addPoint, competitorData}) {
                         </thead>
                         <tbody>
                             {
-                                points.map((value: Point, index : number) => (
+                                points.map((value: Point) => (
                                     <tr>
                                         <td>{value.point}</td>
                                         <td>{value.description}</td>

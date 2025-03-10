@@ -116,7 +116,7 @@ async function addPoint(point: INewPointData, episodeId: string): Promise<IDBRes
       searchedEpisode.points.push(newPoint);
       await searchedEpisode.save();
 
-      const updatedEpisode = await Episode.findOne().where({date : episodeId});
+      //const updatedEpisode = await Episode.findOne().where({date : episodeId});
 
       //TODO: add check for saved episode, and its in the Points array
 
