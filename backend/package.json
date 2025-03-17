@@ -12,7 +12,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node ./comp/index.js"
+    "start": "tsc && node ./comp/index.js",
+    "build": "tsc" 
   },
   "author": "",
   "license": "ISC",
