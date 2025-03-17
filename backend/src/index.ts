@@ -139,3 +139,26 @@ app.put('/api/set-episode-release-date', async (req, res) => {
     res.send(response.errorMessage);
   }
 })
+
+app.put('/api/close-episode', async (req, res) => {
+
+  const episodeId: string = req.body.episodeId;
+
+  if(episodeId === null){
+    res.status(400);
+    res.send("episodeId or episodeDate is empty!");
+  }
+
+  const updates : Partial<IEpisode> = {isClosed : true}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
