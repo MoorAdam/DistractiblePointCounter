@@ -10,6 +10,7 @@ interface IPoint {
 
 interface IEpisode {
   publicId : string,
+  isClosed : true | false,
   recordingDate: Date;
   releaseDate?: Date;
   title?: string | "Untitled Episode";
