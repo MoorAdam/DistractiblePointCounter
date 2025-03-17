@@ -11,6 +11,7 @@ import CompetitorData from '../components/Boards page components/Competitor.js';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
 import NavBar from '../components/NavBar';
 import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
+import EndEpisodeFields from '../components/Boards page components/EndEpisodeFields';
 
 function Boards() {
 
@@ -18,6 +19,7 @@ function Boards() {
     const [winner, setWinner] = useState(null);
 
     const [winnerModal, setWinnerModal] = useState(false);
+    const [endEpisodeModal, setEndEpisodeModal] = useState(false);
 
     const initialData = {
         Mark: new CompetitorData("Mark", markImage),
@@ -74,6 +76,8 @@ function Boards() {
     return(
         <div>
             <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={() => setWinnerModal(false)}/>} open={winnerModal}/>
+            
+            
 
             <div>
                 <NavBar children={navBarItems}/>
