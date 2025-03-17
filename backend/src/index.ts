@@ -29,7 +29,7 @@ app.post('/api/create-episode', async (req, res) => {
 
   const newEpisode : INewEpisodeData = req.body;
 
-  const response : IDBResponse= await dataBase.createEpisode(newEpisode);
+  const response : IDBResponse = await dataBase.createNewEpisode(newEpisode);
 
   console.log(response);
 

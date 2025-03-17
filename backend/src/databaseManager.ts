@@ -14,6 +14,7 @@ const pointSchema = new Schema<IPoint>({
 
 const episodeSchema = new Schema<IEpisode>({
   publicId : { type: String, required: true, unique: true},
+  isClosed : { type : Boolean, default: false},
   recordingDate: { type: Date, required: true},
   releaseDate : { type: Date, unique: true},
   title: { type: String },
@@ -64,7 +65,7 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
   }
 }
 
-async function createEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
+async function createNewEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
   try {
 
       const newEpisode = new Episode({
@@ -152,7 +153,7 @@ module.exports = {
   connectDatabase,
   getEpisodeByDate,
   addPoint,
-  createEpisode,
+  createEpisode: createNewEpisode,
   getAllPointsFromEpisode,
 };
 
