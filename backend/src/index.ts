@@ -119,7 +119,7 @@ app.put('/api/set-episode-title', async (req, res) => {
 app.put('/api/set-episode-release-date', async (req, res) => {
 
   const episodeId: string = req.body.episodeId;
-  const episodeReleaseDate: string = req.body.episodeTitle;
+  const episodeReleaseDate: string = req.body.episodeReleaseDate;
 
   if(episodeId === null || episodeReleaseDate === null){
     res.status(400);

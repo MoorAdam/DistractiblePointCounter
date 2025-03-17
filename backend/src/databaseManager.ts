@@ -167,7 +167,7 @@ async function updateEpisode(episodeId: string, episodeData: Partial<IEpisode>):
       }
     });
 
-    episode.save();
+    await episode.save();
 
     return { success: true };
 
