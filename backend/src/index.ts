@@ -91,3 +91,29 @@ app.get('/api/get-all-points-from-episode', async(req,res) => {
     res.send(result.errorMessage)
   }
 })
+
+app.put('/api/set-episode-title', async (req, res) => {
+
+  const episodeId: string = req.body.episodeId;
+  const episodeTitle: string = req.body.episodeTitle;
+
+  console.log(`Request for setting title for episode ${episodeTitle}`);
+
+  if(episodeId === null || episodeTitle === null){
+    res.status(400);
+    res.send("episodeId or episodeTitle is empty!");
+  }
+
+  const updates : Partial<IEpisode> = {title : episodeTitle}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})

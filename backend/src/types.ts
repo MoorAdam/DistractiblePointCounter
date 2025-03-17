@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 interface IPoint {
   publicId : string,
   point: number;
