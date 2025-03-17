@@ -27,10 +27,6 @@ export default class Competitor {
         return this._competitorImage;
     }
 
-    getNames(){
-        return this._competitorName;
-    }
-
     getAllPoints(){
         return this._points;
     }

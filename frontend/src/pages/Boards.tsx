@@ -10,6 +10,7 @@ const bobImage = '/images/bob.jpg';
 import CompetitorData from '../components/Boards page components/Competitor.js';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
 import NavBar from '../components/NavBar';
+import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
 
 function Boards() {
 
@@ -60,10 +61,7 @@ function Boards() {
         for (let competitorName in competitorData) {
             const points = competitorData[competitorName].tabulatePoints();
             if (points > maxPoints) {
-                winner = {
-                    name : competitorName,
-                    data : competitorData[competitorName]
-                }
+                winner = competitorData[competitorName]
                 maxPoints = points;
             }
         }
@@ -71,15 +69,17 @@ function Boards() {
         setWinnerModal(true);
         return winner;
     }
+    
 
     return(
         <div>
-            <Modal children={<p1>Not working yet</p1>} open={winnerModal} onClose={setWinnerModal}/>
+            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={() => setWinnerModal(false)}/>} open={winnerModal}/>
+
             <div>
                 <NavBar children={navBarItems}/>
             </div>
             
-            {winnerModal ? <Modal children={<CreateNewEpisodeFields/>} open={newEpisodeModalVisibility} onClose={setNewEpisodeModalVisibility}/> : null} 
+            {winnerModal ? <Modal children={<CreateNewEpisodeFields/>} open={newEpisodeModalVisibility}/> : null} 
             <div className={"flex gap-4 m-4 h-full"}>
                 <CompetitorBoard
                         competitorData={competitorData.Mark}

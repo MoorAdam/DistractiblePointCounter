@@ -20,6 +20,7 @@ export default function CreateNewEpisodeFields() {
             </select>
             
             <button className="bg-blue-500 text-white p-2 mt-4">Create Episode</button>
+            <button className="bg-black-500 text-white p-2 mt-4">Cancel</button>
         </div>
     );
 }
