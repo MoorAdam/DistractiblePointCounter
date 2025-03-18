@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
-import {IDBResponse, INewPointData, INewEpisodeData } from "./types";
+import {IDBResponse, INewPointData, INewEpisodeData, IEpisode } from "./types";
 
 (async () => {
   try {
@@ -29,7 +29,7 @@ app.post('/api/create-episode', async (req: { body: INewEpisodeData; }, res: { s
 
   const newEpisode : INewEpisodeData = req.body;
 
-  const response : IDBResponse = await dataBase.createNewEpisode(newEpisode);
+  const response : IDBResponse<string> = await dataBase.createNewEpisode(newEpisode);
 
   console.log(response);
 
@@ -111,6 +111,27 @@ app.put('/api/set-episode-title', async (req, res) => {
   if(response.success){
     res.status(201);
     res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
+
+app.get('/api/get-episode/:episodeId', async (req, res) => {
+  
+  const episodeId: string = req.params.episodeId;
+
+  if(episodeId === null){
+    res.status(400);
+    res.send("episodeId is empty!");
+  }
+
+  const response: IDBResponse = await dataBase.getEpisodeById(episodeId) 
+
+  if(response.success){
+    res.status(200);
+    res.send(response.data);
   }
   else{
     res.status(response.errorCode);

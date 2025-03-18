@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CompetitorBoard from "../components/Boards page components/CompetitorBoard";
 import Modal from "../components/Modal";
-import {NavItem, Point} from "@types";
+import {NavItem, Point, Episode} from "@types";
 const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
 
 const POST_POINT_URL = "/api/add-point";
 const POST_NEW_EPISODE_URL = "/api/create-episode";
+const GET_EPISODE_URL = "/api/get-episode";
 
 import CompetitorData from '../components/Boards page components/Competitor';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
@@ -28,14 +29,52 @@ function Boards() {
     const [host, setHost] = useState<CompetitorData>(null);
     const [competitors, setCompetitors] = useState(initialData)
 
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<string>("");    
 
-    interface Episode {
-        title? : string,
-        recordingDate : Date,
-        releaseDate? : Date,
-        competitors : string[],
-        host : string
+    useEffect(() => {
+        if(localStorage.getItem("episodeId")){
+            loadEpisodeData();
+        }
+    },[]);
+
+    async function loadEpisodeData() {
+        const data = await getEpisodeData(localStorage.getItem("episodeId"));
+        setTitle(data.title);
+        setRecordingDate(data.recordingDate);
+        setReleaseDate(data.releaseDate);
+        setHost(competitors[data.host]);
+        setCompetitors((prevCompetitors) => {
+            const updatedCompetitors = { ...prevCompetitors };
+            data.competitors.forEach(function(compName){
+                updatedCompetitors[compName].clearPoints();
+            });
+            return updatedCompetitors;
+        });
+        loadPoints(data.points);
+    }
+
+    function loadPoints(points : Point[]){
+        points.forEach(function(point){
+
+            const preppedPoint = {...point, date : new Date(point.date)};
+
+            const updatedData = { ...competitors };
+            updatedData[preppedPoint.competitor].addPoint(preppedPoint);
+            setCompetitors(updatedData);
+        });
+    }
+
+    async function getEpisodeData(episodeId : string) : Promise<Episode> {
+
+        console.log("trying to get episode data for episode: " + episodeId)
+
+        const response = await fetch(GET_EPISODE_URL + "/" +  episodeId, {
+            method : "GET",
+            headers : {
+                "Content-Type" : "application/JSON"
+            }
+        })
+        return await response.json();
     }
 
     function createEpisodeFromStates(){
