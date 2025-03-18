@@ -114,6 +114,27 @@ app.put('/api/set-episode-title', async (req, res) => {
   }
 })
 
+app.get('/api/get-episode/:episodeId', async (req, res) => {
+  
+  const episodeId: string = req.params.episodeId;
+
+  if(episodeId === null){
+    res.status(400);
+    res.send("episodeId is empty!");
+  }
+
+  const response: IDBResponse = await dataBase.getEpisodeById(episodeId) 
+
+  if(response.success){
+    res.status(200);
+    res.send(response.data);
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
+
 app.put('/api/set-episode-release-date', async (req, res) => {
 
   const episodeId: string = req.body.episodeId;

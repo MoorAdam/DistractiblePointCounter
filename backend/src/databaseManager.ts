@@ -194,11 +194,35 @@ async function updateEpisode(episodeId: string, episodeData: Partial<IEpisode>):
   }
 }
 
+async function getEpisodeById(episodeId: string): Promise<IDBResponse> {
+  try {
+    const episode = await Episode.findOne({ publicId:
+      episodeId });
+
+    if (!episode) {
+      return {
+        success: false,
+        errorCode: 404,
+        errorMessage: `Can't find episode with episodeId: ${episodeId}`
+      };
+    }
+    return { success: true, data: episode };
+  } catch (error) {
+    console.error("Error getting episode by id:", error);
+    return {
+      success: false,
+      errorCode: 500,
+      errorMessage: "An error occurred while getting the episode."
+    };
+  }
+}
+
 module.exports = {
   connectDatabase,
   getEpisodeByDate,
   addPoint,
   createNewEpisode,
   getAllPointsFromEpisode,
-  updateEpisode
+  updateEpisode,
+  getEpisodeById
 };

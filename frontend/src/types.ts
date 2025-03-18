@@ -12,7 +12,17 @@ interface Point{
     date : Date,
 }
 
+interface Episode {
+        title? : string,
+        recordingDate : Date,
+        releaseDate? : Date,
+        competitors : string[],
+        host : string,
+        points? : Point[]
+    }
+
 export{
     NavItem,
+    Episode,
     Point
 } 
