@@ -165,9 +165,8 @@ function Boards() {
     const buttonStyle = "btn btn-outline btn-success";
 
     const navBarItems: NavItem[] = [
-        {buttonText: "calculateWinner", onclick: calculateWinner, buttonStyle : buttonStyle},
-        {buttonText: "resetPoints", onclick: clearCompetitorData, buttonStyle : buttonStyle},
-        {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle}
+        {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle},
+        {buttonText: "Calculate Winner", onclick: calculateWinner, buttonStyle : buttonStyle},
     ];
 
     function calculateWinner(){
