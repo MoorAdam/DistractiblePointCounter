@@ -12,9 +12,13 @@ export default defineConfig({
   strictPort: true,
  },
  server: {
+  open : true,
   port: 8070,
   strictPort: true,
   host: true,
   origin: "http://0.0.0.0:8070",
+  proxy :{
+   "/api" : "http://localhost:3000"
+  }
  },
 });

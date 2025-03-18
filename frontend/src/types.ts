@@ -5,9 +5,11 @@ interface NavItem {
 }
 
 interface Point{
+    fulfilled : boolean,
+    competitor : string,
     point : number,
     description : string,
-    creationDate : Date,
+    date : Date,
 }
 
 export{

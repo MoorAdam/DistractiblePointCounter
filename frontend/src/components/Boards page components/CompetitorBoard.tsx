@@ -1,5 +1,5 @@
 import React, {useLayoutEffect} from 'react';
-import Point from './Point';
+import {Point} from "@types";
 
 
 
@@ -12,6 +12,9 @@ function CompetitorBoard({addPoint, competitorData}) {
     const [pointDescription, setPointDescription] = React.useState<string>("");
     const [pointValue, setPointValue] = React.useState<number>(0);
 
+    const fulfilledPointStyles = "text-black-600";
+    const unfulfilledPointStyles = "text-black-100";
+
     useLayoutEffect(() => {
         setCurrentPointSum(competitorData.tabulatePoints());
     })
@@ -23,14 +26,19 @@ function CompetitorBoard({addPoint, competitorData}) {
             <div className="m-4">
                 <div className={"competitor-bar-profile"}>
                     <div className={"flex gap-4"}>
-                        <img className={"rounded-box"} src={imageUrl} alt="CompetitorHandle image"/>
+                        <img className={`rounded-box`} src={imageUrl} alt="CompetitorHandle image"/>
                         <h1 className={"align-middle pt-15 pl-20"}>{competitorName} : {currentPointSum}</h1>
                     </div>
                 </div>
                 <div className={"competitor-board-input-bar felx gap-4 mt-4 mb-4"}>
                         <input type="number" placeholder="Point" className="input input-bordered flex-1/5" onChange={(e) => setPointValue(parseInt(e.target.value))}/>
                         <input type="text" placeholder="Description" className="input input-bordered" onChange={(e) => setPointDescription(e.target.value)}/>
-                        <input type="button" className={"btn btn-success"} value={"Submit"} onClick={() => addPoint(competitorName, pointValue, pointDescription)}/>
+                        <input type="button" className={"btn btn-success"} value={"Submit"} onClick={() => addPoint({
+                            competitor : competitorName,
+                            point : pointValue,
+                            description : pointDescription,
+                            date :  new Date(Date.now())
+                        })}/>
                 </div>
                 <div className={"points-board overflow-x-auto bg-base-300 rounded-box"}>
                     <table className='table table-zebra'>
@@ -43,13 +51,13 @@ function CompetitorBoard({addPoint, competitorData}) {
                         </thead>
                         <tbody>
                             {
-                                    points.map((value, index) => (
-                                        <tr>
-                                            <td>{value.point}</td>
-                                            <td>{value.description}</td>
-                                            <td>{value.creationDate.getHours() + ":" + value.creationDate.getMinutes()}</td>
-                                        </tr>
-                                    ))
+                                points.map((value: Point, index : number) => (
+                                    <tr className={`${value.fulfilled ? fulfilledPointStyles : unfulfilledPointStyles}`} key={index}>
+                                        <td>{value.point}</td>
+                                        <td>{value.description}</td>
+                                        <td>{value.date.getHours() + ":" + value.date.getMinutes()}</td>
+                                    </tr>
+                                ))
                             }
                         </tbody>
                     </table>

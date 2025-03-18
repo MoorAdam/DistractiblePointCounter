@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
-import { IPoint, IEpisode, IDBResponse, INewPointData, INewEpisodeData } from "./types";
+import {IDBResponse, INewPointData, INewEpisodeData, IEpisode } from "./types";
 
 (async () => {
   try {
@@ -29,21 +29,21 @@ app.post('/api/create-episode', async (req, res) => {
 
   const newEpisode : INewEpisodeData = req.body;
 
-  const response : IDBResponse = await dataBase.createNewEpisode(newEpisode);
+  const response : IDBResponse<string> = await dataBase.createNewEpisode(newEpisode);
 
   console.log(response);
 
   if(response.success){
     res.status(201);
-    res.send(response);
+    res.send(response.data);
   }
   else{
-    res.status(409);
+    res.status(response.errorCode);
     res.send(response.errorMessage);
   }
 })
 
-app.get('/api/get-episode-by-date', async (req, res) => {
+app.get('/api/get-episode-by-date', async (req: { body: { date: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
 
   //TODO validate date!
 
@@ -62,10 +62,12 @@ app.get('/api/get-episode-by-date', async (req, res) => {
 
 //Point based endpoints
 
-app.post('/api/add-point-to-episode', async(req, res) => {
+app.post('/api/add-point', async(req, res) => {
 
     const point : INewPointData = req.body.point
     const episodeId = req.body.episodeId;
+
+    console.log(req.body)
 
     const result = await dataBase.addPoint(point, episodeId);
 
@@ -79,7 +81,7 @@ app.post('/api/add-point-to-episode', async(req, res) => {
     }
 })
 
-app.get('/api/get-all-points-from-episode', async(req,res) => {
+app.get('/api/get-all-points-from-episode', async(req: { body: { episodeId: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
   const episodeId = req.body.episodeId;
   const result = await dataBase.getAllPointsFromEpisode(episodeId);
   if(result.success){
@@ -127,6 +129,29 @@ app.put('/api/set-episode-release-date', async (req, res) => {
   }
 
   const updates : Partial<IEpisode> = {releaseDate : new Date(episodeReleaseDate)}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
+
+app.put('/api/close-episode', async (req, res) => {
+
+  const episodeId: string = req.body.episodeId;
+
+  if(episodeId === null){
+    res.status(400);
+    res.send("episodeId or episodeDate is empty!");
+  }
+
+  const updates : Partial<IEpisode> = {isClosed : true}
 
   const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
 
