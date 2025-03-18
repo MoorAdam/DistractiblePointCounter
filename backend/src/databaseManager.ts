@@ -16,6 +16,7 @@ const pointSchema = new Schema<IPoint>({
 
 const episodeSchema = new Schema<IEpisode>({
   publicId : { type: String, required: true, unique: true},
+  isClosed : { type : Boolean, default: false},
   recordingDate: { type: Date, required: true},
   releaseDate : { type: Date},
   title: { type: String },
@@ -67,8 +68,7 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
 }
 async function createEpisode(episode: INewEpisodeData): Promise<IDBResponse> {
 
-  //TODO: return proper error messages
-
+async function createNewEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
   try {
     console.log(episode);
     const newEpisode = new Episode({
@@ -162,11 +162,46 @@ async function getAllPointsFromEpisode(episodeId: string): Promise<IDBResponse> 
   }
 }
 
+async function updateEpisode(episodeId: string, episodeData: Partial<IEpisode>): Promise<IDBResponse> {
+  try {
+    const episode = await Episode.findOne({ publicId: episodeId });
+
+    if (!episode) {
+      return {
+        success: false,
+        errorCode: 404,
+        errorMessage: `Can't find episode with episodeId: ${episodeId}`
+      };
+    }
+
+    Object.keys(episodeData).forEach((key) => {
+      if (key in episode) {
+        (episode as any)[key] = episodeData[key as keyof IEpisode];
+      }
+    });
+
+    await episode.save();
+
+    return { success: true };
+
+  } catch (error) {
+    console.error("Error updating episode:", error);
+
+    return {
+      success: false,
+      errorCode: 500,
+      errorMessage: "An error occurred while updating the episode."
+    };
+  }
+}
+
+
 module.exports = {
   connectDatabase,
   getEpisodeByDate,
   addPoint,
-  createEpisode,
+  createNewEpisode,
   getAllPointsFromEpisode,
+  updateEpisode
 };
 

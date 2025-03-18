@@ -12,9 +12,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node comp/index.js",
     "prestart": "npm run build",
-    "build": "tsc"
+    "start": "tsc && node ./comp/index.js",
+    "build": "tsc" 
+
   },
   "author": "",
   "license": "ISC",

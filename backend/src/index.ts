@@ -29,7 +29,7 @@ app.post('/api/create-episode', async (req: { body: INewEpisodeData; }, res: { s
 
   const newEpisode : INewEpisodeData = req.body;
 
-  const response : IDBResponse<string>= await dataBase.createEpisode(newEpisode);
+  const response : IDBResponse = await dataBase.createNewEpisode(newEpisode);
 
   console.log(response);
 
@@ -91,5 +91,76 @@ app.get('/api/get-all-points-from-episode', async(req: { body: { episodeId: any;
   else{
     res.status(result.errorCode);
     res.send(result.errorMessage)
+  }
+})
+
+app.put('/api/set-episode-title', async (req, res) => {
+
+  const episodeId: string = req.body.episodeId;
+  const episodeTitle: string = req.body.episodeTitle;
+
+  if(episodeId === null || episodeTitle === null){
+    res.status(400);
+    res.send("episodeId or episodeTitle is empty!");
+  }
+
+  const updates : Partial<IEpisode> = {title : episodeTitle}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
+
+app.put('/api/set-episode-release-date', async (req, res) => {
+
+  const episodeId: string = req.body.episodeId;
+  const episodeReleaseDate: string = req.body.episodeReleaseDate;
+
+  if(episodeId === null || episodeReleaseDate === null){
+    res.status(400);
+    res.send("episodeId or episodeDate is empty!");
+  }
+
+  const updates : Partial<IEpisode> = {releaseDate : new Date(episodeReleaseDate)}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
+
+app.put('/api/close-episode', async (req, res) => {
+
+  const episodeId: string = req.body.episodeId;
+
+  if(episodeId === null){
+    res.status(400);
+    res.send("episodeId or episodeDate is empty!");
+  }
+
+  const updates : Partial<IEpisode> = {isClosed : true}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
   }
 })

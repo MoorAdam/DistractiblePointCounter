@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 interface IPoint {
   publicId : string,
   point: number;
@@ -10,6 +8,7 @@ interface IPoint {
 
 interface IEpisode {
   publicId : string,
+  isClosed : true | false,
   recordingDate: Date;
   releaseDate?: Date;
   title?: string | "Untitled Episode";
