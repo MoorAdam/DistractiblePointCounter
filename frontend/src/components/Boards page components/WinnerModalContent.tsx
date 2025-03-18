@@ -12,7 +12,7 @@ export default function WinnerModalContent({competitor, onClose, onEndEpisode}){
             <h2 className="text-center text-1xl">With {competitor.tabulatePoints()} points!</h2>
             <div className="flex gap-4">
                 <button onClick={onClose} className="btn btn-soft flex-1">Cancel</button>
-                <button className="btn btn-soft btn-success flex-1">End Episode</button>
+                <button onClick={onEndEpisode} className="btn btn-soft btn-success flex-1">End Episode</button>
             </div>
         </div>
     )

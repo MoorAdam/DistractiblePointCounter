@@ -8,6 +8,7 @@ const bobImage = '/images/bob.jpg';
 
 const POST_POINT_URL = "/api/add-point";
 const POST_NEW_EPISODE_URL = "/api/create-episode";
+const UPDATE_EPISODE_URL = "/api/update-episode";
 
 import CompetitorData from '../components/Boards page components/Competitor';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
@@ -18,9 +19,10 @@ import EndEpisodeFields from '../components/Boards page components/EndEpisodeFie
 function Boards() {
 
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
-    const [winner, setWinner] = useState(null);
-
+    const [endEpisodeModalVisibility, setEndEpisodeModalVisibility] = useState(false);
     const [winnerModal, setWinnerModal] = useState(false);
+    
+    const [winner, setWinner] = useState(null);
 
     const initialData = {
         Mark: new CompetitorData("Mark", markImage),
@@ -40,6 +42,7 @@ function Boards() {
         recordingDate : Date,
         releaseDate? : Date,
         competitors : string[],
+        winner : string,
         host : string
     }
 
@@ -48,6 +51,7 @@ function Boards() {
             title : title ? title : null,
             recordingDate : recordingDate,
             releaseDate : releaseDate ? releaseDate : null,
+            winner : winner ? winner : null,
             competitors : Object.keys(competitors),
             host : host.getName()
         }
@@ -55,9 +59,6 @@ function Boards() {
     }
     
     async function createNewEpisode() {
-        //This function gets called by the create button. It creates a new Episode variable, with the input information
-        //It sends a fetch to the backend. If the request is successful, it closes the modal, and clears all the points
-
         try{
 
             if(!host || !recordingDate){
@@ -98,20 +99,12 @@ function Boards() {
     function clearCompetitorData() {
         setCompetitors((prevCompetitors) => {
             const updatedCompetitors = { ...prevCompetitors };
-            Object.values(updatedCompetitors).forEach(function(comp){comp.clearPoints(); comp.setIsHost(false)});
+            Object.values(updatedCompetitors).forEach(function(comp){comp.clearPoints()});
             return updatedCompetitors;
         });
     }
 
     async function handleAddPoint(newPoint : Point){
-
-        //When a new point has been submitted, the system adds a point to the scoreboard. This point is grayed out, till the backend returns with success
-        //This will be achieved with a custom promise. If it succeeds, it will make the point black, and make the right sound(depending on if the point is positive or negative)
-        //If it fails, it will display a modal that suggest the problem. Most likely backend problems
-
-
-        //TODO: make the point effect described above
-
         console.log("newPoint : " + JSON.stringify(newPoint));
 
         if (newPoint.description === ''){
@@ -128,16 +121,30 @@ function Boards() {
 
     }
 
-
-    //TODO: try making this into a promise, if possible/valuable
-
-
-    //when a new point comes in, we create a new point. We keep the reference to it, so we can change the color later
-    //We add this point to the board.
-    //we send a request to the backend, and wait for the response.
-    //if its successful, we change the color to black, and play a sound
-    //If its not, we send a message to the user, and remove the point
-
+    async function endEpisode(newPoint : Point){
+        try{
+            const response = await fetch(UPDATE_EPISODE_URL, {
+                method : "PATCH",
+                headers : {
+                    "Content-Type" : "application/JSON"
+                },
+                body : JSON.stringify({
+                    episodeId : localStorage.getItem("episodeId"),
+                    updates : {...createEpisodeFromStates(), isClosed : true}
+                })
+            })
+            if (response.ok){
+                console.log("episode was updated")
+            }
+            else {
+                console.log("nope...")
+            }
+        }
+        catch(e){
+            console.log(e.message)
+            setError(e.message)
+        }
+    }
 
     async function submitNewPoint(newPoint : Point){
         try{
@@ -188,7 +195,6 @@ function Boards() {
         setWinnerModal(true);
         return winner;
     }
-    
 
     const createEpisodeFieldsProps = {
         "episodeTitle": (t : string) => setTitle(t),
@@ -196,7 +202,6 @@ function Boards() {
         "releaseDate" : (t : Date) => setReleaseDate(t),
         "host" : function (t : string) {
             const host = competitors[t];
-            host.setIsHost(true);
             setHost(host);
         },
         "onSubmit" : createNewEpisode,
@@ -204,15 +209,34 @@ function Boards() {
         "errorMessage" : error
     }
 
+    const endEpisodeFieldsProps = {
+        "recordingDate" : (t : Date) => recordingDate,
+        "setRecordingDate" : (t : Date) => setRecordingDate(t),
+        "releaseDate" : (t : Date) => releaseDate,
+        "setWinner" : (t : string) => setWinner(t),
+        "winner" : winner,
+        "title" : title,
+        "setTitle" : (t : string) => setTitle,
+        "setReleaseDate" : (t : Date) => setReleaseDate(t),
+        "host" : (t : string) => host,
+        "setHost" : function (t : string) {
+            const host = competitors[t];
+            setHost(host);
+        },
+        "onEndEpisode" : () => (endEpisode),
+        "onCancel" : () => setEndEpisodeModalVisibility(false),
+    }
+
     return(
         <div>
-            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={() => setWinnerModal(false)}/>} open={winnerModal}/>
+            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
-            <div>
-                <NavBar children={navBarItems}/>
-            </div>
+            <Modal children={<EndEpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
+
+            <div><NavBar children={navBarItems}/></div>
 
             <Modal children={<CreateNewEpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
+
             <div className={"flex gap-4 m-4 h-full"}>
                 <CompetitorBoard
                         competitorData={competitors.Mark}

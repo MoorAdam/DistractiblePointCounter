@@ -3,7 +3,6 @@ import {Point} from "@types";
 
 export default class competitorData {
     competitorImage : string;
-    isHost : boolean;
     competitorName : string;
     points : Point[];
 
@@ -14,14 +13,6 @@ export default class competitorData {
     }
     getName(){
         return this.competitorName;
-    }
-
-    setIsHost(isHost : boolean){
-        this.isHost = isHost;
-    }
-
-    getIsHost(){
-        return this.isHost;
     }
 
     addPoint(newPoint : Point){
