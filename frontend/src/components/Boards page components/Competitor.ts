@@ -1,44 +1,49 @@
-import {Point} from '@types';
-export default class Competitor {
-    _competitorImage;
-    _competitorName : string;
-    _points : Point[];
 
-    constructor(competitorName, competitorImage){
-        this._competitorImage = competitorImage;
-        this._competitorName = competitorName;
-        this._points = [];
+import {Point} from "@types";
+
+export default class competitorData {
+    competitorImage : string;
+    isHost : boolean;
+    competitorName : string;
+    points : Point[];
+
+    constructor(competitorName: string, competitorImage: string){
+        this.competitorImage = competitorImage;
+        this.competitorName = competitorName;
+        this.points = [];
     }
     getName(){
-        return this._competitorName;
+        return this.competitorName;
     }
 
-    addPoint(point, desc){
-        //TODO: Make it less spaghetti
-        const newPoint : Point = {
-            point : parseInt(point),
-            description : desc,
-            creationDate : new Date(Date.now()),
-        }
-        this._points.push(newPoint);
+    setIsHost(isHost : boolean){
+        this.isHost = isHost;
+    }
+
+    getIsHost(){
+        return this.isHost;
+    }
+
+    addPoint(newPoint : Point){
+        this.points.push(newPoint);
+    }
+
+    clearPoints(){
+        this.points = [];
     }
 
     getCompetitorImage(){
-        return this._competitorImage;
-    }
-
-    getNames(){
-        return this._competitorName;
+        return this.competitorImage;
     }
 
     getAllPoints(){
-        return this._points;
+        return this.points;
     }
     tabulatePoints(){
 
         let sum= 0;
 
-        for (let point of this._points){
+        for (let point of this.points){
             sum = sum + point.point;
         }
 

@@ -1,9 +1,13 @@
 {
     "compilerOptions": {
         "outDir": "comp",
-        "target": "ES5",
-        "module": "CommonJS",
-        "sourceMap": true
+        "sourceMap": true,
+        "rootDir": "./src",
+        "moduleResolution": "nodenext",
+        "module": "NodeNext",
+        "target": "ES6"
     },
-    "include": ["src/**/*"]
+    "include": ["src/**/*"],
+    "exclude": ["comp"]
+      
 }

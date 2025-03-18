@@ -12,11 +12,13 @@ const pointSchema = new Schema<IPoint>({
   description: {type: String, required: true}
 });
 
+//TODO: The release and recording dates dont need to be unique
+
 const episodeSchema = new Schema<IEpisode>({
   publicId : { type: String, required: true, unique: true},
   isClosed : { type : Boolean, default: false},
   recordingDate: { type: Date, required: true},
-  releaseDate : { type: Date, unique: true},
+  releaseDate : { type: Date},
   title: { type: String },
   host: { type: String, required: true },
   points: [pointSchema],
@@ -38,7 +40,7 @@ async function connectDatabase() {
 
 async function getEpisodeByDate(date: string): Promise<IDBResponse> {
   try {
-    console.log("Trying to query episde by date: " + date);
+    console.log("Trying to query episode by date: " + date);
 
     const result : IEpisode = await Episode.findOne().where({ date: new Date(date) });
 
@@ -60,26 +62,37 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
       success: false,
       errorCode : 400,
       errorMessage:
-        "Something went wrong! Please check if request was submitted with the right data, in the right format!",
+        "Something went wrong! Please check if request was submitted with the right data, in the right format! " + error.errorMessage,
     };
   }
 }
+async function createEpisode(episode: INewEpisodeData): Promise<IDBResponse> {
 
 async function createNewEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
   try {
+    console.log(episode);
+    const newEpisode = new Episode({
+      ...episode,
+      publicId: uuidv4(),
+    });
 
-      const newEpisode = new Episode({
-        ...episode, publicId : uuidv4()
-      });
-      await newEpisode.save();
-      return { success: true, data: newEpisode.publicId };
+    await newEpisode.save(); // Await without callback
+
+    return { success: true, data: { episodeId: newEpisode.publicId } };
   } catch (error) {
-    console.log(error);
+
+    if(error.code === 11000){
+      console.log(`full error: ${error}`)
+      return {
+        success: false,
+        errorCode: 409,
+        errorMessage: `An episode with these properties already exists`, // Access `message` correctly
+      };
+    }
     return {
       success: false,
-      errorCode : 400,
-      errorMessage:
-        "Something went wrong! Please check if request was submitted with the right data, in the right format!",
+      errorCode: 400,
+      errorMessage: `Error saving episode: ${error.message}`, // Access `message` correctly
     };
   }
 }
@@ -91,19 +104,19 @@ async function addPoint(point: INewPointData, episodeId: string): Promise<IDBRes
 
   try {
 
-    const searcedEpisode = await Episode.findOne().where({publicId : episodeId});
+    const searchedEpisode = await Episode.findOne().where({publicId : episodeId});
 
     //TODO: make new point uses the IPoint interface
 
-    if (searcedEpisode) {
+    if (searchedEpisode) {
       const newPoint : IPoint = {
         ...point, publicId : uuidv4()
       };
 
-      searcedEpisode.points.push(newPoint);
-      await searcedEpisode.save();
+      searchedEpisode.points.push(newPoint);
+      await searchedEpisode.save();
 
-      const updatedEpisode = await Episode.findOne().where({date : episodeId});
+      //const updatedEpisode = await Episode.findOne().where({date : episodeId});
 
       //TODO: add check for saved episode, and its in the Points array
 

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
-import { IPoint, IEpisode, IDBResponse, INewPointData, INewEpisodeData } from "./types";
+import {IDBResponse, INewPointData, INewEpisodeData } from "./types";
 
 (async () => {
   try {
@@ -25,7 +25,7 @@ app.listen(port, () => {
 
 //Episode based endpoints
 
-app.post('/api/create-episode', async (req, res) => {
+app.post('/api/create-episode', async (req: { body: INewEpisodeData; }, res: { status: (arg0: number) => void; send: (arg0: string | IDBResponse<unknown>) => void; }) => {
 
   const newEpisode : INewEpisodeData = req.body;
 
@@ -35,15 +35,15 @@ app.post('/api/create-episode', async (req, res) => {
 
   if(response.success){
     res.status(201);
-    res.send(response);
+    res.send(response.data);
   }
   else{
-    res.status(409);
+    res.status(response.errorCode);
     res.send(response.errorMessage);
   }
 })
 
-app.get('/api/get-episode-by-date', async (req, res) => {
+app.get('/api/get-episode-by-date', async (req: { body: { date: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
 
   //TODO validate date!
 
@@ -62,10 +62,12 @@ app.get('/api/get-episode-by-date', async (req, res) => {
 
 //Point based endpoints
 
-app.post('/api/add-point-to-episode', async(req, res) => {
+app.post('/api/add-point', async(req, res) => {
 
     const point : INewPointData = req.body.point
     const episodeId = req.body.episodeId;
+
+    console.log(req.body)
 
     const result = await dataBase.addPoint(point, episodeId);
 
@@ -79,7 +81,7 @@ app.post('/api/add-point-to-episode', async(req, res) => {
     }
 })
 
-app.get('/api/get-all-points-from-episode', async(req,res) => {
+app.get('/api/get-all-points-from-episode', async(req: { body: { episodeId: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
   const episodeId = req.body.episodeId;
   const result = await dataBase.getAllPointsFromEpisode(episodeId);
   if(result.success){
