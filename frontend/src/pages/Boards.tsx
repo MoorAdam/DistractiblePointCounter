@@ -11,8 +11,7 @@ const POST_NEW_EPISODE_URL = "/api/create-episode";
 const UPDATE_EPISODE_URL = "/api/update-episode";
 const GET_EPISODE_URL = "/api/get-episode";
 
-
-import CompetitorData from '../components/Boards page components/Competitor';
+import Competitor from '../components/Boards page components/Competitor';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
 import NavBar from '../components/NavBar';
 import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
@@ -27,14 +26,14 @@ function Boards() {
     const [winner, setWinner] = useState(null);
 
     const initialData = {
-        Mark: new CompetitorData("Mark", markImage),
-        Bob: new CompetitorData("Bob", bobImage),
-        Wade: new CompetitorData("Wade", wadeImage),
+        Mark: new Competitor("Mark", markImage),
+        Bob: new Competitor("Bob", bobImage),
+        Wade: new Competitor("Wade", wadeImage),
     };
     const [title, setTitle] = useState<string>(null);
-    const [recordingDate, setRecordingDate] = useState<Date>(new Date(Date.now()));
+    const [recordingDate, setRecordingDate] = useState<Date>(null);
     const [releaseDate, setReleaseDate] = useState<Date>(null);
-    const [host, setHost] = useState<CompetitorData>(null);
+    const [host, setHost] = useState<Competitor>(null);
     const [competitors, setCompetitors] = useState(initialData)
 
     const [error, setError] = useState<string>("");    
@@ -48,27 +47,20 @@ function Boards() {
     async function loadEpisodeData() {
         const data = await getEpisodeData(localStorage.getItem("episodeId"));
         setTitle(data.title);
-        setRecordingDate(data.recordingDate);
-        setReleaseDate(data.releaseDate);
+        setRecordingDate(new Date(data.recordingDate));
+        setReleaseDate(new Date(data.releaseDate));
         setHost(competitors[data.host]);
         setCompetitors((prevCompetitors) => {
             const updatedCompetitors = { ...prevCompetitors };
             data.competitors.forEach(function(compName){
                 updatedCompetitors[compName].clearPoints();
             });
+            const points = data.points;
+            points.forEach(function(point){
+                const preppedPoint = {...point, date : new Date(point.date)};
+                updatedCompetitors[preppedPoint.competitor].addPoint(preppedPoint);
+            });
             return updatedCompetitors;
-        });
-        loadPoints(data.points);
-    }
-
-    function loadPoints(points : Point[]){
-        points.forEach(function(point){
-
-            const preppedPoint = {...point, date : new Date(point.date)};
-
-            const updatedData = { ...competitors };
-            updatedData[preppedPoint.competitor].addPoint(preppedPoint);
-            setCompetitors(updatedData);
         });
     }
 
@@ -90,7 +82,7 @@ function Boards() {
             title : title ? title : null,
             recordingDate : recordingDate,
             releaseDate : releaseDate ? releaseDate : null,
-            winner : winner ? winner : null,
+            winner : winner ? winner.getName() : null,
             competitors : Object.keys(competitors),
             host : host.getName()
         }
@@ -174,6 +166,7 @@ function Boards() {
             })
             if (response.ok){
                 console.log("episode was updated")
+                setEndEpisodeModalVisibility(false);
             }
             else {
                 console.log("nope...")
@@ -207,7 +200,7 @@ function Boards() {
             return await response.json();
         }
         catch (e) {
-            console.log(e.message )
+            console.error(e.message )
             setError(e.message)
         }
 
@@ -249,26 +242,27 @@ function Boards() {
     }
 
     const endEpisodeFieldsProps = {
-        "recordingDate" : (t : Date) => recordingDate,
+        "recordingDate" : recordingDate,
         "setRecordingDate" : (t : Date) => setRecordingDate(t),
-        "releaseDate" : (t : Date) => releaseDate,
-        "setWinner" : (t : string) => setWinner(t),
+        "releaseDate" : releaseDate,
+        "setReleaseDate" : (t : Date) => setReleaseDate(t),
+        "setWinner" : (t : string) => setWinner(competitors[t]),
         "winner" : winner,
         "title" : title,
         "setTitle" : (t : string) => setTitle,
-        "setReleaseDate" : (t : Date) => setReleaseDate(t),
-        "host" : (t : string) => host,
+        
+        "host" : host,
         "setHost" : function (t : string) {
             const host = competitors[t];
             setHost(host);
         },
-        "onEndEpisode" : () => (endEpisode),
+        "onEndEpisode" : endEpisode,
         "onCancel" : () => setEndEpisodeModalVisibility(false),
     }
 
     return(
         <div>
-            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
+            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
             <Modal children={<EndEpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
 

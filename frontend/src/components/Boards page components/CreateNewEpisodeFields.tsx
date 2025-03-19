@@ -14,10 +14,10 @@ export default function CreateNewEpisodeFields({episodeTitle, recordingDate, rel
             <input type="text" onChange={(e) => episodeTitle(e.target.value)} className="border border-gray-300 p-2 mt-1" />
 
             <label className="text-sm font-semibold text-gray-400 mt-4">★ Recording date</label>
-            <input required={true} onChange={(e) => recordingDate(e.target.value)} type="date" className="border border-gray-300 p-2 mt-1"/>
+            <input required={true} onChange={(e) => recordingDate(new Date(e.target.value))} type="date" className="border border-gray-300 p-2 mt-1"/>
 
             <label className="text-sm font-semibold text-gray-400 mt-4">Release date (You can set it after the episode ends)</label>
-            <input type="date" onChange={(e) => releaseDate(e.target.value)} className="border border-gray-300 p-2 mt-1" />
+            <input type="date" onChange={(e) => releaseDate(new Date(e.target.value))} className="border border-gray-300 p-2 mt-1" />
 
             <label className="text-sm font-semibold text-gray-400 mt-4">★ Host</label>
             <select required={true} defaultValue={""} onChange={(e) => host(e.target.value)} className="border border-gray-300 w-full p-2 mt-1 select">

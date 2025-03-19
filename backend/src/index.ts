@@ -182,7 +182,7 @@ app.put('/api/close-episode', async (req, res) => {
   }
 })
 
-app.post('/api/update-episode', async (req, res) => {
+app.patch('/api/update-episode', async (req, res) => {
   
   const episodeId: string = req.body.episodeId;
   const updates : Partial<IEpisode> = req.body.updates;
