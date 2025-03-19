@@ -41,23 +41,6 @@ app.post('/api/create-episode', async (req, res) => {
   }
 })
 
-app.get('/api/get-episode-by-date', async (req: { body: { date: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
-
-  //TODO validate date!
-
-  const date = req.body.date;
-  const result = await dataBase.getEpisodeByDate(date);
-
-  if(result.success){
-    res.status(200);
-    res.send(result.data);
-  }
-  else{
-    res.status(result.errorCode);
-    res.send(result.errorMessage);
-  }
-})
-
 app.post('/api/add-point', async(req, res) => {
 
     const point : INewPointData = req.body.point
@@ -77,43 +60,6 @@ app.post('/api/add-point', async(req, res) => {
     }
 })
 
-app.get('/api/get-all-points-from-episode', async(req: { body: { episodeId: any; }; }, res: { status: (arg0: number) => void; send: (arg0: any) => void; }) => {
-  const episodeId = req.body.episodeId;
-  const result = await dataBase.getAllPointsFromEpisode(episodeId);
-  if(result.success){
-    res.status(200);
-    res.send(result.data);
-  }
-  else{
-    res.status(result.errorCode);
-    res.send(result.errorMessage)
-  }
-})
-
-app.put('/api/set-episode-title', async (req, res) => {
-
-  const episodeId: string = req.body.episodeId;
-  const episodeTitle: string = req.body.episodeTitle;
-
-  if(episodeId === null || episodeTitle === null){
-    res.status(400);
-    res.send("episodeId or episodeTitle is empty!");
-  }
-
-  const updates : Partial<IEpisode> = {title : episodeTitle}
-
-  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
-
-  if(response.success){
-    res.status(201);
-    res.send();
-  }
-  else{
-    res.status(response.errorCode);
-    res.send(response.errorMessage);
-  }
-})
-
 app.get('/api/get-episode/:episodeId', async (req, res) => {
   
   const episodeId: string = req.params.episodeId;
@@ -128,53 +74,6 @@ app.get('/api/get-episode/:episodeId', async (req, res) => {
   if(response.success){
     res.status(200);
     res.send(response.data);
-  }
-  else{
-    res.status(response.errorCode);
-    res.send(response.errorMessage);
-  }
-})
-
-app.put('/api/set-episode-release-date', async (req, res) => {
-
-  const episodeId: string = req.body.episodeId;
-  const episodeReleaseDate: string = req.body.episodeReleaseDate;
-
-  if(episodeId === null || episodeReleaseDate === null){
-    res.status(400);
-    res.send("episodeId or episodeDate is empty!");
-  }
-
-  const updates : Partial<IEpisode> = {releaseDate : new Date(episodeReleaseDate)}
-
-  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
-
-  if(response.success){
-    res.status(201);
-    res.send();
-  }
-  else{
-    res.status(response.errorCode);
-    res.send(response.errorMessage);
-  }
-})
-
-app.put('/api/close-episode', async (req, res) => {
-
-  const episodeId: string = req.body.episodeId;
-
-  if(episodeId === null){
-    res.status(400);
-    res.send("episodeId or episodeDate is empty!");
-  }
-
-  const updates : Partial<IEpisode> = {isClosed : true}
-
-  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
-
-  if(response.success){
-    res.status(201);
-    res.send();
   }
   else{
     res.status(response.errorCode);
