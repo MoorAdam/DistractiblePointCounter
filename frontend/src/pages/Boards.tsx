@@ -199,18 +199,34 @@ function Boards() {
     ];
 
     function calculateWinner(){
-        let maxPoints : number = Number.MIN_VALUE
-        let winner = null;
-        for (let competitorName in competitors) {
-            const points = competitors[competitorName].tabulatePoints();
-            if (points > maxPoints) {
-                winner = competitors[competitorName]
-                maxPoints = points;
+
+        if(checkForPoints()){
+            let maxPoints : number = Number.MIN_VALUE
+            let winner = null;
+            for (let competitorName in competitors) {
+                const points = competitors[competitorName].tabulatePoints();
+                if (points > maxPoints) {
+                    winner = competitors[competitorName]
+                    maxPoints = points;
+                }
             }
+            setWinner(winner);
+            setWinnerModal(true);
+            return winner;
         }
-        setWinner(winner);
-        setWinnerModal(true);
-        return winner;
+        else{
+            alert("There are no points assigned yet! We cant have a winner without points! Or can we? ( ͝סּ ͜ʖ͡סּ)")
+        }
+        
+    }
+
+    function checkForPoints() : boolean {
+        Object.values(competitors).forEach((comp) => {
+            if(comp.points.length > 0){
+                return true;
+            }
+        })
+        return false;
     }
 
     const createEpisodeFieldsProps = {
