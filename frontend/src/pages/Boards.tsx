@@ -107,8 +107,7 @@ function Boards() {
             }
         }
         catch(e){
-            //setError(e.message)
-            //TODO: write to modal: something happened
+            setError(e.message)
         }
 
     }
