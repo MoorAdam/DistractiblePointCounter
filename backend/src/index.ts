@@ -23,9 +23,7 @@ app.listen(port, () => {
   console.log(`The server is listening on port ${port}`)
 })
 
-//Episode based endpoints
-
-app.post('/api/create-episode', async (req: { body: INewEpisodeData; }, res: { status: (arg0: number) => void; send: (arg0: string | IDBResponse<unknown>) => void; }) => {
+app.post('/api/create-episode', async (req, res) => {
 
   const newEpisode : INewEpisodeData = req.body;
 
@@ -59,8 +57,6 @@ app.get('/api/get-episode-by-date', async (req: { body: { date: any; }; }, res: 
     res.send(result.errorMessage);
   }
 })
-
-//Point based endpoints
 
 app.post('/api/add-point', async(req, res) => {
 
@@ -173,6 +169,28 @@ app.put('/api/close-episode', async (req, res) => {
   }
 
   const updates : Partial<IEpisode> = {isClosed : true}
+
+  const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
+
+  if(response.success){
+    res.status(201);
+    res.send();
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage);
+  }
+})
+
+app.patch('/api/update-episode', async (req, res) => {
+  
+  const episodeId: string = req.body.episodeId;
+  const updates : Partial<IEpisode> = req.body.updates;
+
+  if(episodeId === null || updates === null){
+    res.status(400);
+    res.send("episodeId or updates is empty!");
+  }
 
   const response: IDBResponse = await dataBase.updateEpisode(episodeId, updates) 
 

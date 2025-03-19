@@ -17,6 +17,8 @@ interface Episode {
         recordingDate : Date,
         releaseDate? : Date,
         competitors : string[],
+        winner? : string,
+        isClosed? : boolean,
         host : string,
         points? : Point[]
     }

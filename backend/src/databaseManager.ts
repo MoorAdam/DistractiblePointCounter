@@ -66,6 +66,7 @@ async function getEpisodeByDate(date: string): Promise<IDBResponse> {
     };
   }
 }
+
 async function createNewEpisode(episode : INewEpisodeData): Promise<IDBResponse> {
   try {
     console.log(episode);

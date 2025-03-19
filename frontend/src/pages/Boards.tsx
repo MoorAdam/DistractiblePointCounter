@@ -8,25 +8,32 @@ const bobImage = '/images/bob.jpg';
 
 const POST_POINT_URL = "/api/add-point";
 const POST_NEW_EPISODE_URL = "/api/create-episode";
+const UPDATE_EPISODE_URL = "/api/update-episode";
 const GET_EPISODE_URL = "/api/get-episode";
 
-import CompetitorData from '../components/Boards page components/Competitor';
+import Competitor from '../components/Boards page components/Competitor';
 import CreateNewEpisodeFields from '../components/Boards page components/CreateNewEpisodeFields';
 import NavBar from '../components/NavBar';
+import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
+import EndEpisodeFields from '../components/Boards page components/EndEpisodeFields';
 
 function Boards() {
 
-    const initialData = {
-        Mark: new CompetitorData("Mark", markImage),
-        Bob: new CompetitorData("Bob", bobImage),
-        Wade: new CompetitorData("Wade", wadeImage),
-    };
+    const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
+    const [endEpisodeModalVisibility, setEndEpisodeModalVisibility] = useState(false);
+    const [winnerModal, setWinnerModal] = useState(false);
+    
+    const [winner, setWinner] = useState(null);
 
-    const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState<boolean>(false);
+    const initialData = {
+        Mark: new Competitor("Mark", markImage),
+        Bob: new Competitor("Bob", bobImage),
+        Wade: new Competitor("Wade", wadeImage),
+    };
     const [title, setTitle] = useState<string>(null);
-    const [recordingDate, setRecordingDate] = useState<Date>(new Date(Date.now()));
+    const [recordingDate, setRecordingDate] = useState<Date>(null);
     const [releaseDate, setReleaseDate] = useState<Date>(null);
-    const [host, setHost] = useState<CompetitorData>(null);
+    const [host, setHost] = useState<Competitor>(null);
     const [competitors, setCompetitors] = useState(initialData)
 
     const [error, setError] = useState<string>("");    
@@ -40,27 +47,20 @@ function Boards() {
     async function loadEpisodeData() {
         const data = await getEpisodeData(localStorage.getItem("episodeId"));
         setTitle(data.title);
-        setRecordingDate(data.recordingDate);
-        setReleaseDate(data.releaseDate);
+        setRecordingDate(new Date(data.recordingDate));
+        setReleaseDate(new Date(data.releaseDate));
         setHost(competitors[data.host]);
         setCompetitors((prevCompetitors) => {
             const updatedCompetitors = { ...prevCompetitors };
             data.competitors.forEach(function(compName){
                 updatedCompetitors[compName].clearPoints();
             });
+            const points = data.points;
+            points.forEach(function(point){
+                const preppedPoint = {...point, date : new Date(point.date)};
+                updatedCompetitors[preppedPoint.competitor].addPoint(preppedPoint);
+            });
             return updatedCompetitors;
-        });
-        loadPoints(data.points);
-    }
-
-    function loadPoints(points : Point[]){
-        points.forEach(function(point){
-
-            const preppedPoint = {...point, date : new Date(point.date)};
-
-            const updatedData = { ...competitors };
-            updatedData[preppedPoint.competitor].addPoint(preppedPoint);
-            setCompetitors(updatedData);
         });
     }
 
@@ -82,6 +82,7 @@ function Boards() {
             title : title ? title : null,
             recordingDate : recordingDate,
             releaseDate : releaseDate ? releaseDate : null,
+            winner : winner ? winner.getName() : null,
             competitors : Object.keys(competitors),
             host : host.getName()
         }
@@ -89,9 +90,6 @@ function Boards() {
     }
     
     async function createNewEpisode() {
-        //This function gets called by the create button. It creates a new Episode variable, with the input information
-        //It sends a fetch to the backend. If the request is successful, it closes the modal, and clears all the points
-
         try{
 
             if(!host || !recordingDate){
@@ -132,20 +130,12 @@ function Boards() {
     function clearCompetitorData() {
         setCompetitors((prevCompetitors) => {
             const updatedCompetitors = { ...prevCompetitors };
-            Object.values(updatedCompetitors).forEach(function(comp){comp.clearPoints(); comp.setIsHost(false)});
+            Object.values(updatedCompetitors).forEach(function(comp){comp.clearPoints()});
             return updatedCompetitors;
         });
     }
 
     async function handleAddPoint(newPoint : Point){
-
-        //When a new point has been submitted, the system adds a point to the scoreboard. This point is grayed out, till the backend returns with success
-        //This will be achieved with a custom promise. If it succeeds, it will make the point black, and make the right sound(depending on if the point is positive or negative)
-        //If it fails, it will display a modal that suggest the problem. Most likely backend problems
-
-
-        //TODO: make the point effect described above
-
         console.log("newPoint : " + JSON.stringify(newPoint));
 
         if (newPoint.description === ''){
@@ -162,16 +152,31 @@ function Boards() {
 
     }
 
-
-    //TODO: try making this into a promise, if possible/valuable
-
-
-    //when a new point comes in, we create a new point. We keep the reference to it, so we can change the color later
-    //We add this point to the board.
-    //we send a request to the backend, and wait for the response.
-    //if its successful, we change the color to black, and play a sound
-    //If its not, we send a message to the user, and remove the point
-
+    async function endEpisode(newPoint : Point){
+        try{
+            const response = await fetch(UPDATE_EPISODE_URL, {
+                method : "PATCH",
+                headers : {
+                    "Content-Type" : "application/JSON"
+                },
+                body : JSON.stringify({
+                    episodeId : localStorage.getItem("episodeId"),
+                    updates : {...createEpisodeFromStates(), isClosed : true}
+                })
+            })
+            if (response.ok){
+                console.log("episode was updated")
+                setEndEpisodeModalVisibility(false);
+            }
+            else {
+                console.log("nope...")
+            }
+        }
+        catch(e){
+            console.log(e.message)
+            setError(e.message)
+        }
+    }
 
     async function submitNewPoint(newPoint : Point){
         try{
@@ -195,7 +200,7 @@ function Boards() {
             return await response.json();
         }
         catch (e) {
-            console.log(e.message )
+            console.error(e.message )
             setError(e.message)
         }
 
@@ -214,14 +219,12 @@ function Boards() {
         for (let competitorName in competitors) {
             const points = competitors[competitorName].tabulatePoints();
             if (points > maxPoints) {
-                winner = {
-                    name : competitorName,
-                    data : competitors[competitorName]
-                }
+                winner = competitors[competitorName]
                 maxPoints = points;
             }
         }
-        alert(winner.name + " : " + winner.data.tabulatePoints());
+        setWinner(winner);
+        setWinnerModal(true);
         return winner;
     }
 
@@ -231,7 +234,6 @@ function Boards() {
         "releaseDate" : (t : Date) => setReleaseDate(t),
         "host" : function (t : string) {
             const host = competitors[t];
-            host.setIsHost(true);
             setHost(host);
         },
         "onSubmit" : createNewEpisode,
@@ -239,12 +241,35 @@ function Boards() {
         "errorMessage" : error
     }
 
+    const endEpisodeFieldsProps = {
+        "recordingDate" : recordingDate,
+        "setRecordingDate" : (t : Date) => setRecordingDate(t),
+        "releaseDate" : releaseDate,
+        "setReleaseDate" : (t : Date) => setReleaseDate(t),
+        "setWinner" : (t : string) => setWinner(competitors[t]),
+        "winner" : winner,
+        "title" : title,
+        "setTitle" : (t : string) => setTitle,
+        
+        "host" : host,
+        "setHost" : function (t : string) {
+            const host = competitors[t];
+            setHost(host);
+        },
+        "onEndEpisode" : endEpisode,
+        "onCancel" : () => setEndEpisodeModalVisibility(false),
+    }
+
     return(
         <div>
-            <div>
-                <NavBar children={navBarItems}/>
-            </div>
+            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
+
+            <Modal children={<EndEpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
+
+            <div><NavBar children={navBarItems}/></div>
+
             <Modal children={<CreateNewEpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
+
             <div className={"flex gap-4 m-4 h-full"}>
                 <CompetitorBoard
                         competitorData={competitors.Mark}
