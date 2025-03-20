@@ -37,7 +37,7 @@ export default function EpisodeCard({episode} : {episode : Episode}){
                 
             </ul>
             <div className="mt-5 col-span-2">
-                <button onClick={() => navigate("/" + episode.publicId)} className="btn btn-success size-full h-13">Open episode</button>
+                <button onClick={() => {localStorage.setItem("episodeId", episode.publicId); navigate("/")} } className="btn btn-success size-full h-13">Open episode</button>
             </div>
         </div>
     )

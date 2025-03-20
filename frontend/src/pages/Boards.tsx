@@ -15,12 +15,14 @@ import Competitor from '../components/Boards page components/Competitor';
 import NavBar from '../components/NavBar';
 import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
 import EndEpisodeFields from '../components/Boards page components/EndEpisodeFields';
+import { useNavigate } from 'react-router';
 
 function Boards() {
-
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
     const [endEpisodeModalVisibility, setEndEpisodeModalVisibility] = useState(false);
     const [winnerModal, setWinnerModal] = useState(false);
+
+    const navigate = useNavigate();
 
     const initialData = {
         Mark: new Competitor("Mark", markImage),
@@ -190,9 +192,10 @@ function Boards() {
 
     }
 
-    const buttonStyle = "btn btn-outline btn-success";
+    const buttonStyle = "btn btn-accent";
 
     const navBarItems: NavItem[] = [
+        {buttonText: "Episodes", onclick: () => navigate("/episodes"), buttonStyle : buttonStyle},
         {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle},
         {buttonText: "Calculate Winner", onclick: calculateWinner, buttonStyle : buttonStyle},
     ];
