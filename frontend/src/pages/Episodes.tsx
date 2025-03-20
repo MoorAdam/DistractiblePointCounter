@@ -21,19 +21,12 @@ export default function Episodes(){
         const response = await fetch(EPISODES_URL);
         const result : Episode[] = await response.json()
         if(response.ok){
-            setEpisodes(result.map(e => {
+            setEpisodes(result.reverse().map(e => {
                 return {...e, releaseDate : new Date(e.releaseDate), recordingDate : new Date(e.recordingDate)}
             }));
         }
         setLoading(false);
     }
-
-    if(loading){
-        return (
-            <Loading></Loading>
-        )
-    }
-
     const navbarItems : NavItem[] = [
         {
             buttonText : "New episode",
@@ -42,26 +35,36 @@ export default function Episodes(){
         },
     ]
 
-
     return (
         <div>
             <NavBar children={navbarItems}/>
-            <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-4 gap-4 m-4">
-                {episodes === null ? (<h1>No episodes yet!</h1>)
-                :    
+
+            {
+                loading ? 
                 (
-                    episodes.map((ep, index) => {
-                        return(
-                            <div className="" key={index}>
-                                <EpisodeCard episode={ep}/>
-                            </div>
-                        )
-                        
-                    })
+                <div className="h-dvh p-80 rounded-box justify-center items-center flex">
+                    <Loading></Loading>
+                </div>
                 )
-                }
-            </div>
-            
+                :
+                (
+                    <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-4 gap-4 m-4">
+                        {episodes === null ? (<h1>No episodes yet!</h1>)
+                        :    
+                        (
+                            episodes.map((ep, index) => {
+                                return(
+                                    <div className="" key={index}>
+                                        <EpisodeCard episode={ep}/>
+                                    </div>
+                                )
+                                
+                            })
+                        )
+                        }
+                    </div>
+                )
+            }
         </div>
     )
 }

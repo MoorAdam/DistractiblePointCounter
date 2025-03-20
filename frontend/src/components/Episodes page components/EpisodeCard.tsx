@@ -16,7 +16,7 @@ export default function EpisodeCard({episode} : {episode : Episode}){
 
     return(
         <div className="glass p-4 rounded-box shadow-md " key={episode.title}>
-            <h3 className="truncate text-4xl text-center bg-base-100 rounded-box mb-4 p-3">{episode.title ? episode.title : "No title"}</h3>
+            <h3 className="truncate text-2xl text-center bg-base-100 rounded-box mb-4 p-3">{episode.title ? episode.title : "No title"}</h3>
             <ul className="list bg-base-100 rounded-box shadow-md">
                 <li className="list-row">
                     <h3 className="font-bold">Host:</h3> 

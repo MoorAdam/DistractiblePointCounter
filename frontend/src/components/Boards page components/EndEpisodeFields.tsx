@@ -5,7 +5,7 @@ import {Episode} from "@types";
 export default function EndEpisodeFields({recordingDate = null, setRecordingDate, releaseDate = null, setReleaseDate, host = null, setHost, winner = null, setWinner = null, title = null, setTitle, onSubmit, submitLabel, onCancel}) {
     
     const [localTitle, setLocalTitle] = useState<string>(title);
-    const [localRecordingDate, setLocalRecordingDate] = useState<Date>(recordingDate);
+    const [localRecordingDate, setLocalRecordingDate] = useState<Date>(recordingDate ? recordingDate : new Date(Date.now()));
     const [localReleaseDate, setLocalReleaseDate] = useState<Date>(releaseDate);
     const [localHost, setLocalHost] = useState<string>(host ? host.getName() : null);
     const [localWinner, setLocalWinner] = useState<string>(winner ? winner.getName() : null);
@@ -33,8 +33,6 @@ export default function EndEpisodeFields({recordingDate = null, setRecordingDate
             winner : localWinner ? localWinner : null,
             competitors : ["Mark", "Bob", "Wade"]
         }
-
-
         onSubmit(newEpisodeDetails);
     }
     

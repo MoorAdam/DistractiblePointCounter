@@ -249,7 +249,7 @@ function Boards() {
     }
 
     return(
-        <div>
+        <div className="h-screen overflow-hidden flex flex-col">
             <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
             <Modal children={<EndEpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
@@ -258,7 +258,7 @@ function Boards() {
 
             <Modal children={<EndEpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
 
-            <div className={"flex gap-4 m-4 h-full"}>
+            <div className={"flex gap-4 m-4 "}>
                 <CompetitorBoard
                         competitorData={competitors.Mark}
                         addPoint={handleAddPoint}
