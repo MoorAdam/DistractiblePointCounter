@@ -1,5 +1,6 @@
+import React from 'react';
 import './App.css'
-import Boards from "./components/Boards.jsx";
+import Boards from "./pages/Boards";
 
 
 /*
