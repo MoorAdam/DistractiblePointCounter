@@ -31,7 +31,7 @@ function CompetitorBoard({addPoint, competitorData}) {
                             <span className={''}>{competitorName}</span>
                         </div>
                         <div className={"rounded-box bg-base-100 flex justify-center items-center"}>
-                            <p className='text-3xl'>{currentPointSum}</p>
+                            <p className='text-3xl truncate'>{currentPointSum}</p>
                         </div>
                     </div>
                 </div>
@@ -58,9 +58,9 @@ function CompetitorBoard({addPoint, competitorData}) {
                             {
                                 points.map((value: Point, index : number) => (
                                     <tr className={`${value.fulfilled ? fulfilledPointStyles : unfulfilledPointStyles}`} key={index}>
-                                        <td>{value.point}</td>
-                                        <td>{value.description}</td>
-                                        <td>{value.date.getHours() + ":" + value.date.getMinutes()}</td>
+                                        <td className='truncate'>{value.point}</td>
+                                        <td className='truncate'>{value.description}</td>
+                                        <td className='truncate'>{value.date.getHours() + ":" + value.date.getMinutes()}</td>
                                     </tr>
                                 ))
                             }
