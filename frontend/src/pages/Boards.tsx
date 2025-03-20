@@ -14,7 +14,7 @@ const GET_EPISODE_URL = "/api/get-episode";
 import Competitor from '../components/Boards page components/Competitor';
 import NavBar from '../components/NavBar';
 import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
-import EndEpisodeFields from '../components/Boards page components/EndEpisodeFields';
+import EpisodeFields from '../components/Boards page components/EpisodeFields';
 import { useNavigate } from 'react-router';
 
 function Boards() {
@@ -268,11 +268,11 @@ function Boards() {
         <div className="h-screen overflow-hidden flex flex-col">
             <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
-            <Modal children={<EndEpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
+            <Modal children={<EpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
 
             <div><NavBar children={navBarItems}/></div>
 
-            <Modal children={<EndEpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
+            <Modal children={<EpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
 
             <div className={"flex gap-4 m-4 "}>
                 <CompetitorBoard

@@ -2,7 +2,7 @@ import React from "react";
 import {useState} from "react"
 import {Episode} from "@types";
 
-export default function EndEpisodeFields({recordingDate = null, setRecordingDate, releaseDate = null, setReleaseDate, host = null, setHost, winner = null, setWinner = null, title = null, setTitle, onSubmit, submitLabel, onCancel}) {
+export default function EpisodeFields({recordingDate = null, setRecordingDate, releaseDate = null, setReleaseDate, host = null, setHost, winner = null, setWinner = null, title = null, setTitle, onSubmit, submitLabel, onCancel}) {
     
     const [localTitle, setLocalTitle] = useState<string>(title);
     const [localRecordingDate, setLocalRecordingDate] = useState<Date>(recordingDate ? recordingDate : new Date(Date.now()));
