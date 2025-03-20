@@ -185,7 +185,28 @@ async function getAllEpisodes() : Promise<IDBResponse>{
   }
 }
 
+async function deleteEpisode(episodeId: string) : Promise<IDBResponse>{
+
+  try {
+    
+    const response = await Episode.findOneAndDelete({publicId : episodeId});
+
+    if(response.publicId === episodeId){
+      return {
+        success: true
+      }
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      errorCode: 500
+    }
+  }
+}
+
 module.exports = {
+  deleteEpisode,
   connectDatabase,
   addPoint,
   createNewEpisode,

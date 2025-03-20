@@ -112,7 +112,30 @@ app.get("/api/episodes", async (req, res) => {
   }
   else if(response.errorCode === 204){
     res.status(response.errorCode);
-    res.send({key : "value"});
+    res.send(response.data);
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage)
+  }
+})
+
+app.delete("/api/episode", async(req,res) => {
+  const episodeId = req.body.episodeId;
+
+  if(!episodeId){
+    res.status(400);
+    res.send("No episode id provided!");
+  }
+
+  const response : IDBResponse = await dataBase.deleteEpisode(episodeId);
+
+  if(response.success){
+    res.send(response.data);
+  }
+  else if(response.errorCode === 204){
+    res.status(response.errorCode);
+    res.send("Successfully deleted");
   }
   else{
     res.status(response.errorCode);
