@@ -30,7 +30,10 @@ export default function Episodes(){
     const navbarItems : NavItem[] = [
         {
             buttonText : "New episode",
-            onclick : () => (navigate("/")),
+            onclick : () => {
+                localStorage.clear(); 
+                navigate("/")
+            },
             buttonStyle : "btn btn-accent"
         },
     ]

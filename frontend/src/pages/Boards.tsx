@@ -42,6 +42,9 @@ function Boards() {
         if(localStorage.getItem("episodeId")){
             loadEpisodeData();
         }
+        else{
+            setNewEpisodeModalVisibility(true);
+        }
     },[]);
 
     async function loadEpisodeData() {
@@ -241,7 +244,7 @@ function Boards() {
         },
         "onSubmit" : createNewEpisode,
         "submitLabel" : "Create episode",
-        "onCancel" : () => setNewEpisodeModalVisibility(false),
+        "onCancel" : () => localStorage.getItem("episodeId") ? setNewEpisodeModalVisibility(false) : navigate("/episodes"),
     }
 
     const endEpisodeFieldsProps = {
