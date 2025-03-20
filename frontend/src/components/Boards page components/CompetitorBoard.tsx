@@ -25,9 +25,14 @@ function CompetitorBoard({addPoint, competitorData}) {
         <div className={"glass rounded-box flex-auto h-full"}>
             <div className="m-4">
                 <div className={"competitor-bar-profile"}>
-                    <div className={"flex gap-4"}>
-                        <img className={`rounded-box`} src={imageUrl} alt="CompetitorHandle image"/>
-                        <h1 className={"align-middle pt-15 pl-20"}>{competitorName} : {currentPointSum}</h1>
+                    <div className={"grid grid-rows-2 grid-cols-2 gap-4"}>
+                        <img className={`rounded-box row-span-2`} src={imageUrl} alt="CompetitorHandle image"/>
+                        <div className={"text-5xl rounded-box bg-base-100 justify-center items-center flex"}>
+                            <span className={''}>{competitorName}</span>
+                        </div>
+                        <div className={"rounded-box bg-base-100 flex justify-center items-center"}>
+                            <p className='text-3xl'>{currentPointSum}</p>
+                        </div>
                     </div>
                 </div>
                 <div className={"competitor-board-input-bar felx gap-4 mt-4 mb-4"}>

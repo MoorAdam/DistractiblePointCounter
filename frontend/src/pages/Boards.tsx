@@ -15,12 +15,14 @@ import Competitor from '../components/Boards page components/Competitor';
 import NavBar from '../components/NavBar';
 import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
 import EndEpisodeFields from '../components/Boards page components/EndEpisodeFields';
+import { useNavigate } from 'react-router';
 
 function Boards() {
-
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
     const [endEpisodeModalVisibility, setEndEpisodeModalVisibility] = useState(false);
     const [winnerModal, setWinnerModal] = useState(false);
+
+    const navigate = useNavigate();
 
     const initialData = {
         Mark: new Competitor("Mark", markImage),
@@ -107,8 +109,7 @@ function Boards() {
             }
         }
         catch(e){
-            //setError(e.message)
-            //TODO: write to modal: something happened
+            setError(e.message)
         }
 
     }
@@ -191,9 +192,10 @@ function Boards() {
 
     }
 
-    const buttonStyle = "btn btn-outline btn-success";
+    const buttonStyle = "btn btn-accent";
 
     const navBarItems: NavItem[] = [
+        {buttonText: "Episodes", onclick: () => navigate("/episodes"), buttonStyle : buttonStyle},
         {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle},
         {buttonText: "Calculate Winner", onclick: calculateWinner, buttonStyle : buttonStyle},
     ];
@@ -263,7 +265,7 @@ function Boards() {
     }
 
     return(
-        <div>
+        <div className="h-screen overflow-hidden flex flex-col">
             <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
             <Modal children={<EndEpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
@@ -272,7 +274,7 @@ function Boards() {
 
             <Modal children={<EndEpisodeFields {...createEpisodeFieldsProps}/>} open={newEpisodeModalVisibility}/>
 
-            <div className={"flex gap-4 m-4 h-full"}>
+            <div className={"flex gap-4 m-4 "}>
                 <CompetitorBoard
                         competitorData={competitors.Mark}
                         addPoint={handleAddPoint}

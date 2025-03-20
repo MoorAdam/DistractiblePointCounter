@@ -157,10 +157,39 @@ async function getEpisodeById(episodeId: string): Promise<IDBResponse> {
   }
 }
 
+async function getAllEpisodes() : Promise<IDBResponse>{
+  try{
+    const episodes = await Episode.find({})
+
+    if(episodes){
+      return {
+        success : true,
+        data: episodes
+      }
+    }
+    else{
+      return{
+        success: false,
+        errorCode: 204,
+        errorMessage: "There are no episodes to to display yet!"
+      }
+    }
+
+  }
+  catch(e){
+    return {
+      success : false,
+      errorCode : 500,
+      errorMessage : "Something happened, please try again!"
+    }
+  }
+}
+
 module.exports = {
   connectDatabase,
   addPoint,
   createNewEpisode,
   updateEpisode,
-  getEpisodeById
+  getEpisodeById,
+  getAllEpisodes
 };
