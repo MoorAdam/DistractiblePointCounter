@@ -1,5 +1,6 @@
 import React from "react";
-import { IEpisodeCard } from "@types";
+import { Episode } from "@types";
+import { useNavigate } from "react-router";
 
 const getYMD = (date : Date) => {
     const year = date.getFullYear();
@@ -9,7 +10,10 @@ const getYMD = (date : Date) => {
     return `${year}-${month}-${day}`;
 }
 
-export default function EpisodeCard({episode} : {episode : IEpisodeCard}){
+export default function EpisodeCard({episode} : {episode : Episode}){
+
+    const navigate = useNavigate();
+
     return(
         <div className="glass p-4 rounded-box shadow-md " key={episode.title}>
             <h3 className="truncate text-4xl text-center bg-base-100 rounded-box mb-4 p-3">{episode.title ? episode.title : "No title"}</h3>
@@ -33,7 +37,7 @@ export default function EpisodeCard({episode} : {episode : IEpisodeCard}){
                 
             </ul>
             <div className="mt-5 col-span-2">
-                <button className="btn btn-success size-full h-13">Open episode</button>
+                <button onClick={() => navigate("/" + episode.publicId)} className="btn btn-success size-full h-13">Open episode</button>
             </div>
         </div>
     )

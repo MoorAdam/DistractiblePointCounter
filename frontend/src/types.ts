@@ -13,15 +13,16 @@ interface IPoint{
 }
 
 interface IEpisode {
-        title? : string,
-        recordingDate : Date,
-        releaseDate? : Date,
-        competitors : string[],
-        winner? : string,
-        isClosed? : boolean,
-        host : string,
-        points? : IPoint[]
-    }
+    publicId? : string,
+    title : string | "Untitled episode",
+    recordingDate : Date | "No recording date",
+    releaseDate? : Date | "No release date",
+    competitors : string[],
+    winner? : string,
+    isClosed? : boolean,
+    host : string,
+    points? : IPoint[]
+}
 
 interface IEpisodeCard{
     title: string | "Untitled episode",
