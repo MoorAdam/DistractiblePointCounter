@@ -226,11 +226,11 @@ function Boards() {
     }
 
     function checkForPoints() : boolean {
-        Object.values(competitors).forEach((comp) => {
-            if(comp.points.length > 0){
+        for(const competitor of Object.values(competitors)){
+            if(competitor.points.length > 0){
                 return true;
             }
-        })
+        }
         return false;
     }
 
