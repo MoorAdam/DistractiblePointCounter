@@ -102,3 +102,20 @@ app.patch('/api/update-episode', async (req, res) => {
     res.send(response.errorMessage);
   }
 })
+
+app.get("/api/episodes", async (req, res) => {
+
+  const response : IDBResponse<IEpisode[]> = await dataBase.getAllEpisodes();
+
+  if(response.success){
+    res.send(response.data);
+  }
+  else if(response.errorCode === 204){
+    res.status(response.errorCode);
+    res.send({key : "value"});
+  }
+  else{
+    res.status(response.errorCode);
+    res.send(response.errorMessage)
+  }
+})

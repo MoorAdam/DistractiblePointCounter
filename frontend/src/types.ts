@@ -1,10 +1,10 @@
-interface NavItem {
+interface INavItem {
     buttonText : string,
     onclick() : void,
     buttonStyle : string
 }
 
-interface Point{
+interface IPoint{
     fulfilled : boolean,
     competitor : string,
     point : number,
@@ -12,7 +12,7 @@ interface Point{
     date : Date,
 }
 
-interface Episode {
+interface IEpisode {
         title? : string,
         recordingDate : Date,
         releaseDate? : Date,
@@ -20,11 +20,21 @@ interface Episode {
         winner? : string,
         isClosed? : boolean,
         host : string,
-        points? : Point[]
+        points? : IPoint[]
     }
 
+interface IEpisodeCard{
+    title: string | "Untitled episode",
+    releaseDate : Date | "No upload date!",
+    recordingDate : Date,
+    host : string,
+    winner : string | "No winner yet!",
+    closed : boolean
+}
+
 export{
-    NavItem,
-    Episode,
-    Point
+    INavItem as NavItem,
+    IEpisode as Episode,
+    IPoint as Point,
+    IEpisodeCard
 } 
