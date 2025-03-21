@@ -16,10 +16,12 @@ import NavBar from '../components/NavBar';
 import WinnerModalContent from '../components/Boards page components/WinnerModalContent';
 import EpisodeFields from '../components/Boards page components/EpisodeFields';
 import { useNavigate } from 'react-router';
+import ErrorModalContent from '../components/ErrorModalContent';
 
 function Boards() {
     const [newEpisodeModalVisibility, setNewEpisodeModalVisibility] = useState(false);
     const [endEpisodeModalVisibility, setEndEpisodeModalVisibility] = useState(false);
+    const [errorModalVisibility, setErrorModalVisibility] = useState(false);
     const [winnerModal, setWinnerModal] = useState(false);
 
     const navigate = useNavigate();
@@ -113,6 +115,7 @@ function Boards() {
         }
         catch(e){
             setError(e.message)
+            setErrorModalVisibility(true);
         }
 
     }
@@ -165,6 +168,7 @@ function Boards() {
         catch(e){
             console.log(e.message)
             setError(e.message)
+            setErrorModalVisibility(true)
         }
     }
 
@@ -191,6 +195,7 @@ function Boards() {
         catch (e) {
             console.error(e.message )
             setError(e.message)
+            setErrorModalVisibility(true)
         }
 
     }
@@ -220,7 +225,8 @@ function Boards() {
             return winner;
         }
         else{
-            alert("There are no points assigned yet! We cant have a winner without points! Or can we? ( ͝סּ ͜ʖ͡סּ)")
+            setError("There are no points assigned yet! We cant have a winner without points! Or can we? ( ͝סּ  ͜ʖ͡ סּ)")
+            setErrorModalVisibility(true)
         }
         
     }
@@ -269,6 +275,8 @@ function Boards() {
 
     return(
         <div className="h-screen overflow-hidden flex flex-col">
+            <Modal children={<ErrorModalContent errorText={error} onCloseEpisode={() => {setErrorModalVisibility(false); setEndEpisodeModalVisibility(true); setWinner(competitors["Mark"])}} onClose={() => setErrorModalVisibility(false)}/>} open={errorModalVisibility}/>
+
             <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
             <Modal children={<EpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
