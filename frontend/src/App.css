@@ -64,8 +64,16 @@ body::before {
   flex-grow: 1;
 }
 
-
-
+:root:has(
+    :is(
+        .modal-open,
+        .modal:target,
+        .modal-toggle:checked + .modal,
+        .modal[open]
+      )
+  ) {
+  scrollbar-gutter: unset;
+}
 
 .points-board{
   overflow-y: scroll;
