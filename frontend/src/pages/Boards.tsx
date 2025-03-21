@@ -277,7 +277,7 @@ function Boards() {
         <div className="h-screen overflow-hidden flex flex-col">
             <Modal children={<ErrorModalContent errorText={error} onCloseEpisode={() => {setErrorModalVisibility(false); setEndEpisodeModalVisibility(true); setWinner(competitors["Mark"])}} onClose={() => setErrorModalVisibility(false)}/>} open={errorModalVisibility}/>
 
-            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); console.log("Ending episode"); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
+            <Modal children={<WinnerModalContent competitor={winner} onClose={() => setWinnerModal(false)} onEndEpisode={function(){setWinnerModal(false); setErrorModalVisibility(false); setEndEpisodeModalVisibility(true)}}/>} open={winnerModal}/>
 
             <Modal children={<EpisodeFields {...endEpisodeFieldsProps}/>} open={endEpisodeModalVisibility}/>
 
