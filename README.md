@@ -9,7 +9,7 @@ This is a fanmade site for managing points for podcast  [Distractible](https://o
 
 It adheres to the rules of __The Concile Of Distractible__ which says that every point the host gives must contain a description which tells why the point was given.
 
-![main-screenshot](/readme-images/project-screenshot.png)
+![main-screenshot](/readme-images/boards%20with%20points%20screenshot.png)
 
 ## Developers
 
@@ -18,6 +18,9 @@ MoorAdam [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?log
 ## Technologies
 
 [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](https://nodejs.org/en)<br>
+[![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](http://mongodb.com/)<br>
+[![DaisyUI](https://img.shields.io/badge/DaisyUI-5A0EF8?logo=daisyui&logoColor=fff)](https://daisyui.com/)<br>
+[![TailwindCSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)<br>
 [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](https://react.dev/)<br>
 [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=fff)](https://vite.dev/)<br>
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)](https://www.w3schools.com/js/js_intro.asp)<br>
@@ -25,9 +28,6 @@ MoorAdam [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?log
 [![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff)](https://en.wikipedia.org/wiki/CSS)<br>
 
 ## Running the frontend application
-
-There is a dockerized version available on Docker Hub through this link: https://hub.docker.com/r/adammoor/distractible_point_counter<br>
-If you would like to see more about the source code, follow the instructions down below.
 
 This application's front end uses Vite as its main build tool.
 You will need [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](https://nodejs.org/en) to run this app! (You can download it by clicking on the green label)
@@ -48,25 +48,51 @@ http://localhost:5173/
 ``` 
 (Remember that __Ctrl + C__ will stop the running application, i recomend using __leftClick + copy instead__)
 
+### Backend
+
+To start the backend, you first need to step into the backend directory
+```
+cd backend
+```
+Then install dependencies
+
+```
+npm i
+```
+
+(if the app doesnt start without errors, use npm audit fix. This will be fixed later)
+
+Since this project uses a mongodb backend, please install a local mongodb from https://www.mongodb.com/try/download/community
+The installer will install the mongoDb compass, so you can manage databases. There, create a new database, and copy the connection link. it will look something like this *mongodb://localhost:27017/*
+
+In the .env file inside the backend folder, put your url after the DB_URL key, and put your database's name behind the /
+
+Now you can run your backend
+
+```
+npm run start
+```
+
+When it says "Database Connected", you are all good to go
+
 ## Usage
 
 There are three contestants (even the host can be in the race). The user, from the start of the podcast episode, will assign points to the contestants. These can be positive and negative numbers. 
 
-![point-table-image](/readme-images/point-table.png)
+![point-table-image](/readme-images/competitor%20board.png)
 
 The user can write the number to the left input box. The user is also required to add a description in the left input box. Without it, the system won't allow submission. 
 
 When the user adds points and a description, they can press submit. The system will record the point in a list and display the point, description, and submission date.
 
-![point-table-with-score-image](/readme-images/point-table-with-score.png)
+![point-table-with-score-image](/readme-images/competitor%20board%20with%20points.png)
 
 At the end of the episode, the user can click on the __Calculate Winner__ button, to reveal the winner. It will display the name and score of the victorious contestant.
 
-![winner-image](/readme-images/win-message.png)
+![winner-image](/readme-images/winner.png)
 
 ## Future Plans
-- Import/export options for point boards
-- Backend database for saving past scores
-- Options for turning on/off rules
+- Savable and loadable wheel of fortune
+- A coin flip function
 - The __The Concile Of Distractible__ has many rules, that this this project does not adhere to. In the future, there will be options for these laws to be fulfilled easily. (For example, Futurama references made by Bom, should always grant 10 points)
 
