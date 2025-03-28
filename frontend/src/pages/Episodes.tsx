@@ -32,7 +32,7 @@ export default function Episodes(){
             buttonText : "New episode",
             onclick : () => {
                 localStorage.clear(); 
-                navigate("/")
+                navigate("/episode")
             },
             buttonStyle : "btn btn-accent"
         },

@@ -10,8 +10,8 @@ import Episodes from "./pages/Episodes.js";
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Boards/>}/>
-      <Route path='/episodes' element={<Episodes/>}/>
+      <Route path='/' element={<Episodes/>}/>
+      <Route path='/episode' element={<Boards/>}/>
     </Routes>
   </BrowserRouter>
 )

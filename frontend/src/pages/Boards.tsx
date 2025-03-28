@@ -203,7 +203,7 @@ function Boards() {
     const buttonStyle = "btn btn-accent";
 
     const navBarItems: NavItem[] = [
-        {buttonText: "Episodes", onclick: () => navigate("/episodes"), buttonStyle : buttonStyle},
+        {buttonText: "Episodes", onclick: () => navigate("/"), buttonStyle : buttonStyle},
         {buttonText: "Create new Episode", onclick: () => setNewEpisodeModalVisibility(true), buttonStyle : buttonStyle},
         {buttonText: "Calculate Winner", onclick: calculateWinner, buttonStyle : buttonStyle},
     ];
@@ -250,7 +250,7 @@ function Boards() {
         },
         "onSubmit" : createNewEpisode,
         "submitLabel" : "Create episode",
-        "onCancel" : () => localStorage.getItem("episodeId") ? setNewEpisodeModalVisibility(false) : navigate("/episodes"),
+        "onCancel" : () => localStorage.getItem("episodeId") ? setNewEpisodeModalVisibility(false) : navigate("/"),
     }
 
     const endEpisodeFieldsProps = {
