@@ -27,6 +27,27 @@ MoorAdam [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?log
 [![HTML](https://img.shields.io/badge/HTML-%23E34F26.svg?logo=html5&logoColor=white)](https://en.wikipedia.org/wiki/HTML)<br>
 [![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff)](https://en.wikipedia.org/wiki/CSS)<br>
 
+
+## Running from Docker
+
+This application is dockerized. Meaning that you only need the Docker application to run it.
+To do so, pull this project to your computer, and in the root folder of the project, type this command
+
+```
+docker build -t distractible-point-counter
+```
+
+This will create a Docker Container in the Docker Dekstop app. You can either run the app from there, or use the command
+
+```
+docker run -p 127.0.0.1:3000:3000 distractible-point-counter
+```
+
+This will start up the application, with all of its parts, including the Frontend Backend and Database
+
+You can now open the application on [http://127.0.0.1:8080](http://127.0.0.1:8080)
+
+
 ## Running the frontend application
 
 This application's front end uses Vite as its main build tool.
