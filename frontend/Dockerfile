@@ -14,7 +14,7 @@ COPY . .
 # Expose port
 EXPOSE 8080
 
-ENV VITE_API_URL = http://backend:3000
+ENV VITE_API_URL=http://backend:3000
 
 # Start the backend using compiled JavaScript
 CMD ["npm", "run", "dev"]
