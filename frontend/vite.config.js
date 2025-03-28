@@ -8,17 +8,17 @@ export default defineConfig({
     react(), 
     tailwindcss()],
  preview: {
-  port: 8070,
+  port: 8080,
   strictPort: true,
  },
  server: {
   open : true,
-  port: 8070,
+  port: 8080,
   strictPort: true,
   host: true,
-  origin: "http://0.0.0.0:8070",
+  origin: "http://0.0.0.0:8080",
   proxy :{
-   "/api" : "http://localhost:3000"
+   "/api": process.env.VITE_API_URL || "http://localhost:3000"
   }
  },
 });

@@ -6,15 +6,19 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install --omit=dev
 
-# Copy the rest of the fronetnd code
+# Copy the rest of the backend code
 COPY . .
 
-# Expose port
-EXPOSE 8080
+# Compile TypeScript
+RUN npm run build
 
-ENV VITE_API_URL = http://backend:3000
+# Expose port
+EXPOSE 3000
+
+# Set environment variable to production
+ENV NODE_ENV=production
 
 # Start the backend using compiled JavaScript
-CMD ["npm", "run", "dev"]
+CMD ["node", "comp/index.js"]
