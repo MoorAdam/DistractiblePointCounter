@@ -2,7 +2,7 @@
 
 
 # DistractiblePointCounter
-This is a fanmade site for managing points for podcast  [Distractible](https://open.spotify.com/show/2X40qLyoj1wQ2qE5FVpA7x), hosted by 
+This is a fan-made site for managing points for the podcast  [Distractible](https://open.spotify.com/show/2X40qLyoj1wQ2qE5FVpA7x), hosted by 
 - Mark Fishbach [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/channel/UC7_YxT-KID8kRbqZo7MyscQ)
 - Bob Muyskens [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/@muyskerm)
 - Wade Barnes [![YouTube](https://img.shields.io/badge/YouTube-%23FF0000.svg?logo=YouTube&logoColor=white)](https://www.youtube.com/@LordMinion777)<br>
@@ -45,7 +45,7 @@ Now, you can just simply go to your browser, and on [http://localhost:8080/](htt
 
 ## Usage
 
-The application is used for managing episodes, and assing points for the contestents of said episodes. 
+The application is used for managing episodes, and assing points for the contestants of said episodes. 
 
 When you open the application, you will find yourself on the episodes page. This is where all the existing episodes are visible. Here you can see some information about the episode, and have the ability to open the episode. You also have the ability, to create a new episode, witht the __Create Episode__ button on the top menu bar
 
@@ -65,7 +65,7 @@ Pressing __Create Episode__ will hide the dialog box, and lets the user to start
 
 ### Episode
 
-When you either open an episode, or create a new one, three contestents appear ont the page. These three are the 3 main participants in the podcast. They compete with each other, while the host (user) assigns points for them (even the host can be in the race). The user, from the start of the podcast episode, will assign points to the contestants. These can be positive and negative numbers. 
+When you either open an episode, or create a new one, three contestants appear ont the page. These three are the 3 main participants in the podcast. They compete with each other, while the host (user) assigns points for them (even the host can be in the race). The user, from the start of the podcast episode, will assign points to the contestants. These can be positive and negative numbers. 
 
 ![point-table-image](/readme-images/competitor%20board.png)
 
@@ -85,7 +85,7 @@ At the end of the episode, the user can click on the __Calculate Winner__ button
 
 ### Ending the episode
 
-After the winner is revealed, the user can choose to end the episode. This will reveale a dialog box, where the user can change the properties of the episode if they so choose to (its not required)
+After the winner is revealed, the user can choose to end the episode. This will reveale a dialog box, where the user can change the properties of the episode if they so choose to (it's not required)
 
 When they press save, the system will save the changes
 
