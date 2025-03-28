@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_URL=mongodb://mongo:27017/distractibleDB
+    depends_on:
+      - mongo
+    networks:
+      - app_network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+  mongo:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app_network
+
+networks:
+  app_network:
+
+volumes:
+  mongo_data:
