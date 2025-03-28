@@ -34,18 +34,12 @@ This application is dockerized. Meaning that you only need the Docker applicatio
 To do so, pull this project to your computer, and in the root folder of the project, type this command
 
 ```
-docker build -t distractible-point-counter
+docker compose -f 'docker-compose.yaml' up -d --build
 ```
 
-This will create a Docker Container in the Docker Dekstop app. You can either run the app from there, or use the command
+This command will create all the necessary images, downloads dependencies, and starts the container itself.
 
-```
-docker run -p 127.0.0.1:3000:3000 distractible-point-counter
-```
-
-This will start up the application, with all of its parts, including the Frontend Backend and Database
-
-You can now open the application on [http://127.0.0.1:8080](http://127.0.0.1:8080)
+Now, you can just simply go to your browser, and on [http://localhost:8080/](http://localhost:8080/) you can view the application
 
 
 ## Running the frontend application
