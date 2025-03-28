@@ -41,55 +41,6 @@ This command will create all the necessary images, downloads dependencies, and s
 
 Now, you can just simply go to your browser, and on [http://localhost:8080/](http://localhost:8080/) you can view the application
 
-
-## Running the frontend application
-
-This application's front end uses Vite as its main build tool.
-You will need [![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)](https://nodejs.org/en) to run this app! (You can download it by clicking on the green label)
-Vite requires external libraries to run, so you need to install those.
-In the terminal, navigate to the project directory. There, navigate into the frontend folder, and type
-```js
-npm install
-```
-This will download all the necessary libraries into the __node_mobules__ folder.
-
-To run the application with __Node.js__, you can open a terminal in the project's frontend directory, and type 
-``` javascript
-npm run dev
-```
-This will allow you to view the frontend application in the browser. Use the __URL__ provided by the terminal. It should look like this: 
-```
-http://localhost:5173/
-``` 
-(Remember that __Ctrl + C__ will stop the running application, i recomend using __leftClick + copy instead__)
-
-### Backend
-
-To start the backend, you first need to step into the backend directory
-```
-cd backend
-```
-Then install dependencies
-
-```
-npm i
-```
-
-(if the app doesnt start without errors, use npm audit fix. This will be fixed later)
-
-Since this project uses a mongodb backend, please install a local mongodb from https://www.mongodb.com/try/download/community
-The installer will install the mongoDb compass, so you can manage databases. There, create a new database, and copy the connection link. it will look something like this *mongodb://localhost:27017/*
-
-In the .env file inside the backend folder, put your url after the DB_URL key, and put your database's name behind the /
-
-Now you can run your backend
-
-```
-npm run start
-```
-
-When it says "Database Connected", you are all good to go
-
 ## Usage
 
 There are three contestants (even the host can be in the race). The user, from the start of the podcast episode, will assign points to the contestants. These can be positive and negative numbers. 
