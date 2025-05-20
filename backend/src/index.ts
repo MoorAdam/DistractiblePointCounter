@@ -1,4 +1,5 @@
 const express = require('express')
+import cors from "cors"
 const app = express()
 const port = 3000
 const dataBase = require("./databaseManager");
@@ -12,6 +13,11 @@ import {IDBResponse, INewPointData, INewEpisodeData, IEpisode } from "./types";
       console.error('Failed to connect to the database:', error);
   }
 })();
+
+app.use(cors({
+	origin: "http://localhost:8080",
+	}
+));
 
 app.use(express.json());
 

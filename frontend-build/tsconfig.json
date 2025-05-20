@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "jsx" : "react",
+        "outDir": "comp",
+        "target": "ESNext",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "paths" : {
+            "@types" : ["./src/types"],
+            "@components" : ["./components"],
+            //"@styles" : ["./styles"],
+        }
+    },
+    "include": ["src/**/*"]
+}

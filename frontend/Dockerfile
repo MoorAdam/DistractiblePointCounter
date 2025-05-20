@@ -1,20 +1,13 @@
-# Use official Node.js image
-FROM node:18-alpine 
+FROM node:22-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
-
-# Copy the rest of the fronetnd code
 COPY . .
 
-# Expose port
-EXPOSE 8080
+RUN npm i
 
-ENV VITE_API_URL=http://backend:3000
+RUN npm run build
 
-# Start the backend using compiled JavaScript
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "preview"]
+
+#CMD ["npm", "run", "dev"]

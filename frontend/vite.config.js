@@ -18,7 +18,11 @@ export default defineConfig({
   host: true,
   origin: "http://0.0.0.0:8080",
   proxy :{
-   "/api": process.env.VITE_API_URL || "http://localhost:3000"
+   "/api": "http://192.168.1.236:3000"
   }
+/*  proxy :{
+	target: http://distractible-backend:3000,
+	changeOrigin: true
+ }*/
  },
 });

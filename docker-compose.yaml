@@ -1,38 +1,32 @@
-version: '3.8'
-
 services:
   backend:
+    container_name: compose-dist-backend
     build: ./backend
     ports:
       - "3000:3000"
     environment:
-      - DB_URL=mongodb://mongo:27017/distractibleDB
+      DB_URL: "mongodb://mongoadmin:bgyuikmn@compose-dist-database:27017/distractible?authSource=admin"
     depends_on:
       - mongo
-    networks:
-      - app_network
 
   frontend:
+    container_name: compose-dist-frontend
     build: ./frontend
     ports:
       - "8080:8080"
     depends_on:
       - backend
-    networks:
-      - app_network
 
   mongo:
-    image: mongo:6
-    container_name: mongodb
-    ports:
-      - "27017:27017"
+    image: mongo:4.4.6
+    container_name: compose-dist-database
     volumes:
-      - mongo_data:/data/db
-    networks:
-      - app_network
-
-networks:
-  app_network:
+      - vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: bgyuikmn
+#      MONGO_INITDB_ROOT_DATABASE: distractible
 
 volumes:
-  mongo_data:
+  vol:
+

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-const EPISODES_URL = "/api/episodes";
+const BASE_URL = import.meta.env.VITE_API_URL || ""
+const EPISODES_URL = BASE_URL + "/api/episodes";
 import Loading from "../components/Loading";
 import EpisodeCard from "../components/Episodes page components/EpisodeCard";
 import NavBar from "../components/NavBar";

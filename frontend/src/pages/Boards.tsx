@@ -6,10 +6,11 @@ const markImage = '/images/mark.jpg';
 const wadeImage = '/images/wade.jpg';
 const bobImage = '/images/bob.jpg';
 
-const POST_POINT_URL = "/api/add-point";
-const POST_NEW_EPISODE_URL = "/api/create-episode";
-const UPDATE_EPISODE_URL = "/api/update-episode";
-const GET_EPISODE_URL = "/api/get-episode";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+const POST_POINT_URL = API_BASE_URL + "/api/add-point";
+const POST_NEW_EPISODE_URL = API_BASE_URL + "/api/create-episode";
+const UPDATE_EPISODE_URL = API_BASE_URL + "/api/update-episode";
+const GET_EPISODE_URL = API_BASE_URL + "/api/get-episode";
 
 import Competitor from '../components/Boards page components/Competitor';
 import NavBar from '../components/NavBar';

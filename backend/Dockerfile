@@ -1,24 +1,17 @@
-# Use official Node.js image
-FROM node:18-alpine 
+FROM node:22-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install --omit=dev
+COPY package.json .
 
-# Copy the rest of the backend code
-COPY . .
+RUN npm i && npm i typescript -g
 
-# Compile TypeScript
-RUN npm run build
+copy . .
 
-# Expose port
-EXPOSE 3000
+RUN npm i cors
 
-# Set environment variable to production
-ENV NODE_ENV=production
+RUN tsc
 
-# Start the backend using compiled JavaScript
-CMD ["node", "comp/index.js"]
+CMD ["node", "./comp/index.js"]
+
+

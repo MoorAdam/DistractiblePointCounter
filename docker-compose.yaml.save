@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+ backend:
+  build: ./backend
+  ports: 
+   - "3000:3000"
+  depends_on:
+			- mongo
+	
+	networks:
+			- distractible-network
+
+ frontend:
+		build: ./frontend
+		ports:
+			- "8080:8080"
+		depends_on:
+			- backend
+		network:
+			- distractible-network
+ mongo:
+		image: mongo:4.4.6
+		container_name: distractible-backend
+		volumes: 
+			- mongo_data:/data/db
+		networks:
+			- distractible-network
