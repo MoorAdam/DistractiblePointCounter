@@ -13,11 +13,6 @@ import {IDBResponse, INewPointData, INewEpisodeData, IEpisode } from "./types";
   }
 })();
 
-app.use(cors({
-	origin: "http://localhost:8080",
-	}
-));
-
 app.use(express.json());
 
 app.get('/', (res) => {
